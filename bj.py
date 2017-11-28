@@ -1,5 +1,2 @@
-from cards import *
-c=Deck()
-c.printAll()
-c.shuffle()
-c.printAll()
+from table import *
+t=Table(2)
