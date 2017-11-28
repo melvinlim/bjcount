@@ -69,14 +69,17 @@ class Judge(object):
 		return v
 	def winner(self,table):
 		hs=0
-		winner=-1
+		winners=[]
 		for p in table.players:
 			t=self.eval(p.hand)
 			if t>hs:
 				if t<=21:
+					winners=[]
 					hs=t
-					winner=p.pid
-		return winner
+					winners.append(p.pid)
+			elif t==hs:
+				winners.append(p.pid)
+		return winners
 class Table(object):
 	def __init__(self,p):
 		random.seed(time.time)
@@ -105,12 +108,19 @@ class Table(object):
 					pass
 				elif d==1:
 					card=self.deck.pop()
-					print 'dealt to '+str(p.pid)+':'
-					card.disp()
+					print 'dealt '+card.cardString+' to '+str(p.pid)+':'
 					p.receive(card)
 		self.status()
-		winner=self.judge.winner(self)
-		print 'winner: '+str(winner)
+		winners=self.judge.winner(self)
+		if winners==[]:
+			print 'winner: dealer'
+		elif len(winners)==1:
+			print 'winner: '+str(winners[0])
+		else:
+			s=''
+			for w in winners:
+				s+=str(w)+' '
+			print 'winners: '+s
 	def status(self):
 		for p in self.players:
 			p.disp()
