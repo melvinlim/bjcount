@@ -12,6 +12,20 @@ class Player(object):
 			c.disp()
 	def decide(self):
 		return random.randint(0,1)
+class Human(Player):
+	def __init__(self,pid):
+		super(Human,self).__init__(pid)
+	def decide(self):
+		print 'Player '+str(self.pid)+':'
+		print '(h)it/(s)tand?'
+		c=raw_input()
+		if c=='':
+			d=-1
+		elif c=='h':
+			d=1
+		elif c=='s':
+			d=0
+		return d
 class Judge(object):
 	def __init__(self):
 		pass
@@ -47,6 +61,8 @@ class Table(object):
 		for i in range(p):
 			p=Player(i)
 			self.players.append(p)
+		p=Human(i+1)
+		self.players.append(p)
 	def newGame(self):
 		self.deck.shuffle()
 		for i in range(2):
