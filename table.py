@@ -8,8 +8,10 @@ class Player(object):
 		self.hand.append(card)
 	def disp(self):
 		print 'Player '+str(self.pid)+':'
+		s=''
 		for c in self.hand:
-			c.disp()
+			s+=c.cardString+' '
+		print s
 	def decide(self):
 		return random.randint(0,1)
 class Dealer(Player):

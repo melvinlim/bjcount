@@ -34,8 +34,9 @@ class Card(object):
 			value=str(self.v)
 		self.suit=suit
 		self.value=value
+		self.cardString=self.value+self.suit
 	def disp(self):
-		print self.value,self.suit
+		print self.cardString
 		#print self.value,self.suit,self.n
 class Deck(object):
 	def __init__(self):
