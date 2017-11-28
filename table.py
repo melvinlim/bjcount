@@ -12,6 +12,29 @@ class Player(object):
 			c.disp()
 	def decide(self):
 		return random.randint(0,1)
+class Dealer(Player):
+	def __init__(self,pid):
+		super(Dealer,self).__init__(pid)
+	def type1(self):
+		v=0
+		aces=False
+		for c in self.hand:
+			if c.bjv==0:
+				aces=True
+				v+=1
+			else:
+				v+=c.bjv
+		if aces==True:
+			if (v+10)<=21:
+				v+=10
+		if v<17:
+			return 1
+		elif v==17 and aces==True:
+			return 1
+		else:
+			return 0
+	def decide(self):
+		return self.type1()
 class Human(Player):
 	def __init__(self,pid):
 		super(Human,self).__init__(pid)
@@ -62,6 +85,8 @@ class Table(object):
 			p=Player(i)
 			self.players.append(p)
 		p=Human(i+1)
+		self.players.append(p)
+		p=Dealer(i+2)
 		self.players.append(p)
 	def newGame(self):
 		self.deck.shuffle()
