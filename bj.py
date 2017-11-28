@@ -1,4 +1,4 @@
 from table import *
-t=Table(2)
+t=Table(4)
 t.newGame()
-t.status()
+#t.status()
