@@ -15,21 +15,28 @@ class Card(object):
 		else:
 			suit='error'
 		if self.v==0:
+			self.bjv=10
 			value='K'
 		elif self.v==1:
+			self.bjv=0
 			value='A'
 		elif self.v==10:
+			self.bjv=10
 			value='T'
 		elif self.v==11:
+			self.bjv=10
 			value='J'
 		elif self.v==12:
+			self.bjv=10
 			value='Q'
 		else:
+			self.bjv=self.v
 			value=str(self.v)
 		self.suit=suit
 		self.value=value
 	def disp(self):
-		print self.value,self.suit,self.n
+		print self.value,self.suit
+		#print self.value,self.suit,self.n
 class Deck(object):
 	def __init__(self):
 		self.deck=[]
