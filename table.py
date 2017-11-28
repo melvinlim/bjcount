@@ -55,12 +55,16 @@ class Table(object):
 				p.receive(card)
 		self.status()
 		for p in self.players:
-			d=p.decide()
-			if d==0:
-				pass
-			elif d==1:
-				card=self.deck.pop()
-				p.receive(card)
+			d=-1
+			while d!=0 and self.judge.eval(p.hand)<21:
+				d=p.decide()
+				if d==0:
+					pass
+				elif d==1:
+					card=self.deck.pop()
+					print 'dealt to '+str(p.pid)+':'
+					card.disp()
+					p.receive(card)
 		self.status()
 		winner=self.judge.winner(self)
 		print 'winner: '+str(winner)
