@@ -48,3 +48,6 @@ class Deck(object):
 	def printAll(self):
 		for c in self.deck:
 			c.disp()
+	def pop(self):
+		c=self.deck.pop()
+		return c
