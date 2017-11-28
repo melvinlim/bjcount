@@ -1,3 +1,4 @@
+import random
 class Card(object):
 	def __init__(self,n):
 		self.n=n
@@ -37,7 +38,12 @@ class Deck(object):
 		for i in range(52):
 			self.add(i)
 	def shuffle(self):
-		self.__init__()
+		tmp=[]
+		for i in range(51,-1,-1):
+			t=random.randint(0,i)
+			tmp.append(self.deck[t])
+			self.deck.pop(t)
+		self.deck=tmp
 	def add(self,i):
 		card=Card(i)
 		self.deck.append(card)
