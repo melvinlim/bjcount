@@ -22,7 +22,7 @@ class Table(object):
 		self.dealer.discard()
 	def newGame(self):
 		self.deck.shuffle()
-	def deal(self,p):
+	def dealCard(self,p):
 		card=self.deck.pop()
 		if card==None:
 			print 'out of cards.  reshuffling.'
@@ -33,7 +33,7 @@ class Table(object):
 		return card
 	def round(self):
 		#assert len(self.players)==self.nPlayers+1
-		print len(self.players)
+#		print len(self.players)
 		out=[]
 		if len(self.players)==0:
 			print 'no players remaining'
@@ -48,31 +48,24 @@ class Table(object):
 		for i in range(2):
 			for p in self.players:
 				if p.betAmount>0:
-					self.deal(p)
-			self.deal(self.dealer)
+					self.dealCard(p)
+			self.dealCard(self.dealer)
 		self.disp()
 		for p in self.players:
-			d=-1
-			while d!=0 and self.dealer.eval(p.hand)<21:
-				d=p.decide()
-				if d==0:
-					pass
-				elif d==1:
-					card=self.deal(p)
-					p.disp()
+			self.handleDecisions(p)
 		p=self.dealer
+		self.handleDecisions(p)
+		self.dealer.judge(self.players)
+		self.clear()
+	def handleDecisions(self,p):
 		d=-1
 		while d!=0 and self.dealer.eval(p.hand)<21:
 			d=p.decide()
 			if d==0:
 				pass
 			elif d==1:
-				card=self.deal(p)
+				card=self.dealCard(p)
 				p.disp()
-#					print 'dealt '+card.cardString+' to '+str(p.pid)+':'
-#		self.disp()
-		self.dealer.judge(self.players)
-		self.clear()
 	def disp(self):
 		for p in self.players:
 			p.disp()
