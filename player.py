@@ -113,7 +113,16 @@ class Dealer(Player):
 					if t==21 and len(p.hand)==2:
 						p.blackjack=True
 			elif t==dt:
-				ties.append(p)
+				if t==21 and len(p.hand)==2:
+					p.blackjack=True
+					if dt==21 and len(self.hand)==2:
+						ties.append(p)
+					else:
+						winners.append(p)
+				elif dt==21 and len(self.hand)==2:
+					pass
+				else:
+					ties.append(p)
 		return winners,ties
 class Human(Player):
 	def __init__(self,pid,bankroll):
