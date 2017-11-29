@@ -85,9 +85,9 @@ class Judge(object):
 				winners.append(p.pid)
 		return winners
 class Table(object):
-	def __init__(self,p):
+	def __init__(self,p,nDecks):
 		random.seed(time.time)
-		self.deck=Deck()
+		self.deck=Deck(nDecks)
 		self.judge=Judge()
 		self.players=[]
 		for i in range(p):

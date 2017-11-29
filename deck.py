@@ -13,7 +13,7 @@ class Card(object):
 		elif self.s==3:
 			suit='s'
 		else:
-			suit='error'
+			assert False
 		if self.v==0:
 			self.bjv=10
 			value='K'
@@ -39,15 +39,18 @@ class Card(object):
 		print self.cardString
 		#print self.value,self.suit,self.n
 class Deck(object):
-	def __init__(self):
+	def __init__(self,nDecks):
+		self.nDecks=nDecks
+		self.nCards=nDecks*52
 		self.refill()
 	def refill(self):
 		self.deck=[]
-		for i in range(52):
-			self.add(i)
+		for i in range(self.nDecks):
+			for j in range(52):
+				self.add(j)
 	def shuffle(self):
 		tmp=[]
-		for i in range(51,-1,-1):
+		for i in range(self.nCards-1,-1,-1):
 			t=random.randint(0,i)
 			tmp.append(self.deck[t])
 			self.deck.pop(t)

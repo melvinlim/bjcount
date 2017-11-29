@@ -1,5 +1,5 @@
 from table import *
-t=Table(4)
+t=Table(p=4,nDecks=2)
 t.newGame()
 while True:
 	t.round()
