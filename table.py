@@ -26,8 +26,9 @@ class Player(object):
 	def decide(self):
 		return random.randint(0,1)
 class Dealer(Player):
-	def __init__(self,pid,bankroll):
+	def __init__(self,pid,bankroll,table):
 		super(Dealer,self).__init__(pid,bankroll)
+		self.table=table
 	def disp(self):
 		print 'Dealer:\t\t',
 		s=''
@@ -63,7 +64,7 @@ class Dealer(Player):
 		s=''
 		for w in winners:
 			if w.blackjack==True:
-				w.win(w.betAmount*self.bjmultiplier)
+				w.win(w.betAmount*self.table.bjmultiplier)
 			else:
 				w.win(w.betAmount)
 			s+=str(w.pid)+' '
@@ -135,7 +136,7 @@ class Table(object):
 			self.players.append(p)
 		p=Human(i+1,bankroll)
 		self.players.append(p)
-		self.dealer=Dealer(i+2,bankroll)
+		self.dealer=Dealer(i+2,bankroll,self)
 	def clear(self):
 		for p in self.players:
 			p.discard()
