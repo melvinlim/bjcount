@@ -10,7 +10,7 @@ class Player(object):
 	def discard(self):
 		self.hand=[]
 	def disp(self):
-		print 'Player '+str(self.pid)+':'
+		print 'Player '+str(self.pid)+':\t',
 		s=''
 		for c in self.hand:
 			s+=c.cardString+' '
@@ -44,11 +44,12 @@ class Human(Player):
 	def __init__(self,pid):
 		super(Human,self).__init__(pid)
 	def decide(self):
-		print 'Player '+str(self.pid)+':'
-		print '(h)it/(s)tand?'
+		print 'Player '+str(self.pid)+':\t',
+#		self.disp()
+		print '(h)it/(s)tand?\t',
 		c=raw_input()
 		if c=='':
-			d=-1
+			d=0
 		elif c=='h':
 			d=1
 		elif c=='s':
@@ -123,8 +124,9 @@ class Table(object):
 					pass
 				elif d==1:
 					card=self.deal(p)
-					print 'dealt '+card.cardString+' to '+str(p.pid)+':'
-		self.status()
+					p.disp()
+#					print 'dealt '+card.cardString+' to '+str(p.pid)+':'
+#		self.status()
 		winners=self.judge.winner(self)
 		if winners==[]:
 			print 'winner: dealer'
@@ -139,6 +141,6 @@ class Table(object):
 	def status(self):
 		for p in self.players:
 			p.disp()
-			v=self.judge.eval(p.hand)
-			print v
+#			v=self.judge.eval(p.hand)
+#			print v
 #		self.deck.printAll()
