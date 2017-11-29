@@ -118,6 +118,11 @@ class Dealer(Player):
 			elif t==dt:
 				ties.append(p)
 		return winners,ties
+class Stands(Player):
+	def __init__(self,pid,bankroll):
+		super(Stands,self).__init__(pid,bankroll)
+	def decide(self):
+		return 0
 class Human(Player):
 	def __init__(self,pid,bankroll):
 		super(Human,self).__init__(pid,bankroll)

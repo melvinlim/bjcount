@@ -13,7 +13,8 @@ class Table(object):
 		for i in range(nPlayers):
 			p=Player(i,bankroll)
 			self.players.append(p)
-		p=Human(i+1,bankroll)
+#		p=Human(i+1,bankroll)
+		p=Stands(i+1,bankroll)
 		self.players.append(p)
 		self.dealer=Dealer(i+2,bankroll,self)
 	def clear(self):
