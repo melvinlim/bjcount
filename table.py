@@ -5,7 +5,10 @@ class Player(object):
 		self.hand=[]
 		self.pid=pid
 	def receive(self,card):
+		assert card!=None
 		self.hand.append(card)
+	def discard(self):
+		self.hand=[]
 	def disp(self):
 		print 'Player '+str(self.pid)+':'
 		s=''
@@ -93,12 +96,24 @@ class Table(object):
 		self.players.append(p)
 		p=Dealer(i+2)
 		self.players.append(p)
+	def clear(self):
+		for p in self.players:
+			p.discard()
 	def newGame(self):
 		self.deck.shuffle()
+	def deal(self,p):
+		card=self.deck.pop()
+		if card==None:
+			print 'out of cards.  reshuffling.'
+			self.deck.refill()
+			self.deck.shuffle()
+			card=self.deck.pop()
+		p.receive(card)
+		return card
+	def round(self):
 		for i in range(2):
 			for p in self.players:
-				card=self.deck.pop()
-				p.receive(card)
+				self.deal(p)
 		self.status()
 		for p in self.players:
 			d=-1
@@ -107,9 +122,8 @@ class Table(object):
 				if d==0:
 					pass
 				elif d==1:
-					card=self.deck.pop()
+					card=self.deal(p)
 					print 'dealt '+card.cardString+' to '+str(p.pid)+':'
-					p.receive(card)
 		self.status()
 		winners=self.judge.winner(self)
 		if winners==[]:
@@ -121,6 +135,7 @@ class Table(object):
 			for w in winners:
 				s+=str(w)+' '
 			print 'winners: '+s
+		self.clear()
 	def status(self):
 		for p in self.players:
 			p.disp()

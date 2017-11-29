@@ -40,6 +40,8 @@ class Card(object):
 		#print self.value,self.suit,self.n
 class Deck(object):
 	def __init__(self):
+		self.refill()
+	def refill(self):
 		self.deck=[]
 		for i in range(52):
 			self.add(i)
@@ -57,5 +59,8 @@ class Deck(object):
 		for c in self.deck:
 			c.disp()
 	def pop(self):
-		c=self.deck.pop()
+		try:
+			c=self.deck.pop()
+		except:
+			c=None
 		return c
