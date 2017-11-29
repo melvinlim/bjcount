@@ -53,9 +53,9 @@ class Dealer(Player):
 		else:
 			return 0
 	def judge(self,table):
-		winners=table.judge.winner(table)
+		winners,ties=self.winner(table)
 		if winners==[]:
-			print 'winner: dealer'
+			print 'no winners',
 		elif len(winners)==1:
 			print 'winner: ',
 		else:
@@ -68,26 +68,14 @@ class Dealer(Player):
 				w.win(w.betAmount)
 			s+=str(w.pid)+' '
 		print s
+		if ties:
+			print 'tied: ',
+			for p in ties:
+				p.win(0)
+				print p.pid,
+			print
 	def decide(self):
 		return self.type1()
-class Human(Player):
-	def __init__(self,pid,bankroll):
-		super(Human,self).__init__(pid,bankroll)
-	def decide(self):
-		print 'Player '+str(self.pid)+':\t',
-#		self.disp()
-		print '(h)it/(s)tand?\t',
-		c=raw_input()
-		if c=='':
-			d=0
-		elif c=='h':
-			d=1
-		elif c=='s':
-			d=0
-		return d
-class Judge(object):
-	def __init__(self):
-		pass
 	def eval(self,hand):
 		v=0
 		aces=False
@@ -103,6 +91,7 @@ class Judge(object):
 		return v
 	def winner(self,table):
 		winners=[]
+		ties=[]
 		dt=self.eval(table.dealer.hand)
 		if dt>21:
 			dt=0
@@ -114,13 +103,29 @@ class Judge(object):
 					winners.append(p)
 					if t==21 and len(p.hand)==2:
 						p.blackjack=True
-		return winners
+			elif t==dt:
+				ties.append(p)
+		return winners,ties
+class Human(Player):
+	def __init__(self,pid,bankroll):
+		super(Human,self).__init__(pid,bankroll)
+	def decide(self):
+		print 'Player '+str(self.pid)+':\t',
+#		self.disp()
+		print '(h)it/(s)tand?\t',
+		c=raw_input()
+		if c=='':
+			d=0
+		elif c=='h':
+			d=1
+		elif c=='s':
+			d=0
+		return d
 class Table(object):
 	def __init__(self,p,nDecks,bankroll,minBet,bjmultiplier):
 		random.seed(time.time)
 		self.bjmultiplier=bjmultiplier
 		self.deck=Deck(nDecks)
-		self.judge=Judge()
 		self.players=[]
 		self.bankroll=bankroll
 		self.minBet=minBet
@@ -165,7 +170,7 @@ class Table(object):
 		self.status()
 		for p in self.players:
 			d=-1
-			while d!=0 and self.judge.eval(p.hand)<21:
+			while d!=0 and self.dealer.eval(p.hand)<21:
 				d=p.decide()
 				if d==0:
 					pass
@@ -174,7 +179,7 @@ class Table(object):
 					p.disp()
 		p=self.dealer
 		d=-1
-		while d!=0 and self.judge.eval(p.hand)<21:
+		while d!=0 and self.dealer.eval(p.hand)<21:
 			d=p.decide()
 			if d==0:
 				pass
@@ -188,7 +193,7 @@ class Table(object):
 	def status(self):
 		for p in self.players:
 			p.disp()
-#			v=self.judge.eval(p.hand)
+#			v=self.dealer.eval(p.hand)
 #			print v
 #		self.deck.printAll()
 		self.dealer.disp()
