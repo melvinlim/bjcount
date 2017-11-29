@@ -1,16 +1,24 @@
 from deck import *
 import random,time
 class Player(object):
-	def __init__(self,pid):
+	def __init__(self,pid,bankroll):
 		self.hand=[]
 		self.pid=pid
+		self.bankroll=bankroll
+	def bet(self,amount):
+		assert amount<=self.bankroll
+		self.bankroll-=amount
+		self.betAmount=amount
 	def receive(self,card):
 		assert card!=None
 		self.hand.append(card)
 	def discard(self):
 		self.hand=[]
+		self.betAmount=0
+	def win(self,amount):
+		self.bankroll+=amount+self.betAmount
 	def disp(self):
-		print 'Player '+str(self.pid)+':\t',
+		print 'Player '+str(self.pid)+' ('+str(self.bankroll)+'):\t',
 		s=''
 		for c in self.hand:
 			s+=c.cardString+' '
@@ -18,8 +26,8 @@ class Player(object):
 	def decide(self):
 		return random.randint(0,1)
 class Dealer(Player):
-	def __init__(self,pid):
-		super(Dealer,self).__init__(pid)
+	def __init__(self,pid,bankroll):
+		super(Dealer,self).__init__(pid,bankroll)
 	def type1(self):
 		v=0
 		aces=False
@@ -41,8 +49,8 @@ class Dealer(Player):
 	def decide(self):
 		return self.type1()
 class Human(Player):
-	def __init__(self,pid):
-		super(Human,self).__init__(pid)
+	def __init__(self,pid,bankroll):
+		super(Human,self).__init__(pid,bankroll)
 	def decide(self):
 		print 'Player '+str(self.pid)+':\t',
 #		self.disp()
@@ -75,27 +83,33 @@ class Judge(object):
 		hs=0
 		winners=[]
 		for p in table.players:
+			p.blackjack=False
 			t=self.eval(p.hand)
 			if t>hs:
 				if t<=21:
 					winners=[]
 					hs=t
-					winners.append(p.pid)
+					winners.append(p)
+					if t==21 and len(p.hand)==2:
+						p.blackjack=True
 			elif t==hs:
-				winners.append(p.pid)
+				winners.append(p)
 		return winners
 class Table(object):
-	def __init__(self,p,nDecks):
+	def __init__(self,p,nDecks,bankroll,minBet,bjmultiplier):
 		random.seed(time.time)
+		self.bjmultiplier=bjmultiplier
 		self.deck=Deck(nDecks)
 		self.judge=Judge()
 		self.players=[]
+		self.bankroll=bankroll
+		self.minBet=minBet
 		for i in range(p):
-			p=Player(i)
+			p=Player(i,bankroll)
 			self.players.append(p)
-		p=Human(i+1)
+		p=Human(i+1,bankroll)
 		self.players.append(p)
-		p=Dealer(i+2)
+		p=Dealer(i+2,bankroll)
 		self.players.append(p)
 	def clear(self):
 		for p in self.players:
@@ -112,9 +126,21 @@ class Table(object):
 		p.receive(card)
 		return card
 	def round(self):
+		out=[]
+		if len(self.players)==1:
+			print 'no players remaining'
+			return
+		for p in self.players:
+			if p.bankroll>=self.minBet:
+				p.bet(self.minBet)
+			else:
+				out.append(p)
+		for p in out:
+			self.players.remove(p)
 		for i in range(2):
 			for p in self.players:
-				self.deal(p)
+				if p.betAmount>0:
+					self.deal(p)
 		self.status()
 		for p in self.players:
 			d=-1
@@ -131,12 +157,17 @@ class Table(object):
 		if winners==[]:
 			print 'winner: dealer'
 		elif len(winners)==1:
-			print 'winner: '+str(winners[0])
+			print 'winner: ',
 		else:
-			s=''
-			for w in winners:
-				s+=str(w)+' '
-			print 'winners: '+s
+			print 'winners: ',
+		s=''
+		for w in winners:
+			if w.blackjack==True:
+				w.win(w.betAmount*self.bjmultiplier)
+			else:
+				w.win(w.betAmount)
+			s+=str(w.pid)+' '
+		print s
 		self.clear()
 	def status(self):
 		for p in self.players:
