@@ -4,6 +4,7 @@ class Player(object):
 		self.hand=[]
 		self.pid=pid
 		self.bankroll=bankroll
+		self.startingBankroll=bankroll
 		self.gamesPlayed=0
 		self.gamesWon=0
 	def bet(self,amount):
@@ -27,7 +28,9 @@ class Player(object):
 			s+=c.cardString+' '
 		print s
 	def status(self):
-		print 'Player '+str(self.pid)+':\twins/games: '+str(self.gamesWon*1.0/self.gamesPlayed)
+		print 'Player '+str(self.pid)+':',
+		print '\twins/games: '+str(self.gamesWon*1.0/self.gamesPlayed),
+		print '\tearnings/game: '+str((self.bankroll-self.startingBankroll)*1.0/self.gamesPlayed)
 	def decide(self):
 		return random.randint(0,1)
 class Dealer(Player):
