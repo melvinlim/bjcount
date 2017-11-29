@@ -97,32 +97,26 @@ class Dealer(Player):
 		if aces==True:
 			if (v+10)<=21:
 				v+=10
+		if v==21 and len(hand)==2:
+			return 9999
 		return v
 	def winner(self,players):
 		winners=[]
 		ties=[]
 		dt=self.eval(self.hand)
-		if dt>21:
+		if dt>21 and dt!=9999:
 			dt=0
 		for p in players:
 			p.blackjack=False
 			t=self.eval(p.hand)
 			if t>dt:
-				if t<=21:
-					winners.append(p)
-					if t==21 and len(p.hand)==2:
-						p.blackjack=True
-			elif t==dt:
-				if t==21 and len(p.hand)==2:
+				if t==9999:
 					p.blackjack=True
-					if dt==21 and len(self.hand)==2:
-						ties.append(p)
-					else:
-						winners.append(p)
-				elif dt==21 and len(self.hand)==2:
-					pass
-				else:
-					ties.append(p)
+					winners.append(p)
+				elif t<=21:
+					winners.append(p)
+			elif t==dt:
+				ties.append(p)
 		return winners,ties
 class Human(Player):
 	def __init__(self,pid,bankroll):
