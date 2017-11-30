@@ -2,18 +2,19 @@ from deck import *
 from player import *
 from dealer import *
 class Table(object):
-	def __init__(self,nPlayers,nDecks,bankroll,minBet,bjmultiplier):
+	def __init__(self,nPlayers,nDecks,bankroll,minBet,maxBet,bjmultiplier):
 		self.bjmultiplier=bjmultiplier
 		self.nPlayers=nPlayers+1
 		self.deck=Deck(nDecks)
 		self.players=[]
 		self.bankroll=bankroll
 		self.minBet=minBet
+		self.maxBet=maxBet
 		for i in range(nPlayers):
 			p=Player(i,bankroll)
 			self.players.append(p)
-#		p=Human(i+1,bankroll)
-		p=Stands(i+1,bankroll)
+		p=Human(i+1,bankroll)
+#		p=Stands(i+1,bankroll)
 		self.players.append(p)
 		self.dealer=Dealer(i+2,bankroll,self)
 	def round(self):

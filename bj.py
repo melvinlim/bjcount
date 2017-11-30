@@ -5,7 +5,7 @@ try:
 	updateInterval=int(x)
 except:
 	updateInterval=1000
-t=Table(nPlayers=4,nDecks=2,bankroll=100000,minBet=10,bjmultiplier=1.5)
+t=Table(nPlayers=4,nDecks=2,bankroll=100,minBet=10,maxBet=20,bjmultiplier=1.5)
 #t=Table(nPlayers=4,nDecks=2,bankroll=100,minBet=10,bjmultiplier=1.5)
 handsPlayed=0
 while True:

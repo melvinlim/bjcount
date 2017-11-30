@@ -29,29 +29,29 @@ class Dealer(Player):
 		else:
 			return 0
 	def step(self,players):
-		out=[]
-		if len(players)==0:
-			print 'no players remaining'
-			return
+		activePlayers=[]
 		for p in players:
-			if p.bankroll>=self.table.minBet:
-				p.bet(self.table.minBet)
+			p.betDecision(self.table.minBet,self.table.maxBet)
+		for p in players:
+			if p.betBox>=self.table.minBet and p.betBox<=self.table.maxBet:
+				activePlayers.append(p)
 			else:
-				out.append(p)
-		for p in out:
-			players.remove(p)
+				p.bankroll+=p.betBox
+				p.betBox=0
+		if len(activePlayers)==0:
+			print 'no players'
+			return
 		for i in range(2):
-			for p in players:
-				if p.betBox>0:
-					self.dealCard(p)
+			for p in activePlayers:
+				self.dealCard(p)
 		self.dealCard(self)
 		self.table.disp()
-		for p in players:
+		for p in activePlayers:
 			self.handleDecisions(p)
 		self.dealCard(self)
 		self.disp()
 		self.handleDecisions(self)
-		winners,ties=self.evalAll(players)
+		winners,ties=self.evalAll(activePlayers)
 		if winners==[]:
 			print 'no winners',
 		elif len(winners)==1:
@@ -72,7 +72,7 @@ class Dealer(Player):
 				p.win(0)
 				print p.pid,
 			print
-		for p in players:
+		for p in activePlayers:
 			p.discard()
 		self.discard()
 	def decide(self):
