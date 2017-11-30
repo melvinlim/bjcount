@@ -18,9 +18,6 @@ class Player(object):
 			return True
 		else:
 			return False
-	def receive(self,card):
-		assert card!=None
-		self.hand.append(card)
 	def discard(self):
 		self.hand=[]
 		self.betBox=0

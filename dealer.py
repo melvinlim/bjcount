@@ -43,8 +43,8 @@ class Dealer(Player):
 			return
 		for i in range(2):
 			for p in activePlayers:
-				self.dealCard(p)
-		self.dealCard(self)
+				self.dealCard(p.hand)
+		self.dealCard(self.hand)
 		self.table.disp()
 		tbr=[]
 		for p in activePlayers:
@@ -53,7 +53,7 @@ class Dealer(Player):
 		for p in tbr:
 			if p!=None:
 				activePlayers.remove(p)
-		self.dealCard(self)
+		self.dealCard(self.hand)
 		self.disp()
 		self.handleDecisions(self)
 		winners,ties=self.evalAll(activePlayers)
@@ -82,14 +82,14 @@ class Dealer(Player):
 		self.discard()
 	def decide(self,first):
 		return self.type1()
-	def dealCard(self,p):
+	def dealCard(self,hand):
 		card=self.table.deck.pop()
 		if card==None:
 			print 'out of cards.  reshuffling.'
 			self.table.deck.refill()
 			self.table.deck.shuffle()
 			card=self.table.deck.pop()
-		p.receive(card)
+		hand.append(card)
 		return card
 	def evalHand(self,hand):
 		v=0
@@ -132,7 +132,7 @@ class Dealer(Player):
 			if d=='stand':
 				return None
 			elif d=='hit' or d=='double':
-				card=self.dealCard(p)
+				card=self.dealCard(p.hand)
 				p.disp()
 			elif first==True and d=='surrender':
 				p.payout(0.5*p.betBox)
