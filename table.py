@@ -50,10 +50,12 @@ class Table(object):
 			for p in self.players:
 				if p.betAmount>0:
 					self.dealCard(p)
-			self.dealCard(self.dealer)
+		self.dealCard(self.dealer)
 		self.disp()
 		for p in self.players:
 			self.handleDecisions(p)
+		self.dealCard(self.dealer)
+		self.dealer.disp()
 		p=self.dealer
 		self.handleDecisions(p)
 		self.dealer.judge(self.players)
