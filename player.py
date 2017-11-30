@@ -10,16 +10,16 @@ class Player(object):
 	def bet(self,amount):
 		assert amount<=self.bankroll
 		self.bankroll-=amount
-		self.betAmount=amount
+		self.betBox=amount
 		self.gamesPlayed+=1
 	def receive(self,card):
 		assert card!=None
 		self.hand.append(card)
 	def discard(self):
 		self.hand=[]
-		self.betAmount=0
+		self.betBox=0
 	def win(self,amount):
-		self.bankroll+=amount+self.betAmount
+		self.bankroll+=amount+self.betBox
 		self.gamesWon+=1
 	def disp(self):
 		print 'Player '+str(self.pid)+' ('+str(self.bankroll)+'):\t',
@@ -62,7 +62,7 @@ class Dealer(Player):
 		else:
 			return 0
 	def judge(self,players):
-		winners,ties=self.winner(players)
+		winners,ties=self.lookAtHands(players)
 		if winners==[]:
 			print 'no winners',
 		elif len(winners)==1:
@@ -72,9 +72,9 @@ class Dealer(Player):
 		s=''
 		for w in winners:
 			if w.blackjack==True:
-				w.win(w.betAmount*self.table.bjmultiplier)
+				w.win(w.betBox*self.table.bjmultiplier)
 			else:
-				w.win(w.betAmount)
+				w.win(w.betBox)
 			s+=str(w.pid)+' '
 		print s
 		if ties:
@@ -83,6 +83,9 @@ class Dealer(Player):
 				p.win(0)
 				print p.pid,
 			print
+		for p in players:
+			p.discard()
+		self.discard()
 	def decide(self):
 		return self.type1()
 	def eval(self,hand):
@@ -100,7 +103,7 @@ class Dealer(Player):
 		if v==21 and len(hand)==2:
 			return 9999
 		return v
-	def winner(self,players):
+	def lookAtHands(self,players):
 		winners=[]
 		ties=[]
 		dt=self.eval(self.hand)

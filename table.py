@@ -17,10 +17,6 @@ class Table(object):
 		p=Stands(i+1,bankroll)
 		self.players.append(p)
 		self.dealer=Dealer(i+2,bankroll,self)
-	def clear(self):
-		for p in self.players:
-			p.discard()
-		self.dealer.discard()
 	def newGame(self):
 		self.deck.shuffle()
 	def dealCard(self,p):
@@ -48,7 +44,7 @@ class Table(object):
 			self.players.remove(p)
 		for i in range(2):
 			for p in self.players:
-				if p.betAmount>0:
+				if p.betBox>0:
 					self.dealCard(p)
 		self.dealCard(self.dealer)
 		self.disp()
@@ -59,7 +55,6 @@ class Table(object):
 		p=self.dealer
 		self.handleDecisions(p)
 		self.dealer.judge(self.players)
-		self.clear()
 	def handleDecisions(self,p):
 		d=-1
 		while d!=0 and self.dealer.eval(p.hand)<21:
