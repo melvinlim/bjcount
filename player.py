@@ -61,8 +61,30 @@ class Dealer(Player):
 			return 1
 		else:
 			return 0
-	def judge(self,players):
-		winners,ties=self.lookAtHands(players)
+	def step(self,players):
+		out=[]
+		if len(players)==0:
+			print 'no players remaining'
+			return
+		for p in players:
+			if p.bankroll>=self.table.minBet:
+				p.bet(self.table.minBet)
+			else:
+				out.append(p)
+		for p in out:
+			players.remove(p)
+		for i in range(2):
+			for p in players:
+				if p.betBox>0:
+					self.table.dealCard(p)
+		self.table.dealCard(self)
+		self.table.disp()
+		for p in players:
+			self.handleDecisions(p)
+		self.table.dealCard(self)
+		self.disp()
+		self.handleDecisions(self)
+		winners,ties=self.evalAll(players)
 		if winners==[]:
 			print 'no winners',
 		elif len(winners)==1:
@@ -88,7 +110,7 @@ class Dealer(Player):
 		self.discard()
 	def decide(self):
 		return self.type1()
-	def eval(self,hand):
+	def evalHand(self,hand):
 		v=0
 		aces=False
 		for c in hand:
@@ -103,15 +125,15 @@ class Dealer(Player):
 		if v==21 and len(hand)==2:
 			return 9999
 		return v
-	def lookAtHands(self,players):
+	def evalAll(self,players):
 		winners=[]
 		ties=[]
-		dt=self.eval(self.hand)
+		dt=self.evalHand(self.hand)
 		if dt>21 and dt!=9999:
 			dt=0
 		for p in players:
 			p.blackjack=False
-			t=self.eval(p.hand)
+			t=self.evalHand(p.hand)
 			if t>dt:
 				if t==9999:
 					p.blackjack=True
@@ -121,6 +143,15 @@ class Dealer(Player):
 			elif t==dt:
 				ties.append(p)
 		return winners,ties
+	def handleDecisions(self,p):
+		d=-1
+		while d!=0 and self.evalHand(p.hand)<21:
+			d=p.decide()
+			if d==0:
+				pass
+			elif d==1:
+				card=self.table.dealCard(p)
+				p.disp()
 class Stands(Player):
 	def __init__(self,pid,bankroll):
 		super(Stands,self).__init__(pid,bankroll)

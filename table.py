@@ -29,46 +29,10 @@ class Table(object):
 		p.receive(card)
 		return card
 	def round(self):
-		#assert len(self.players)==self.nPlayers+1
-#		print len(self.players)
-		out=[]
-		if len(self.players)==0:
-			print 'no players remaining'
-			return
-		for p in self.players:
-			if p.bankroll>=self.minBet:
-				p.bet(self.minBet)
-			else:
-				out.append(p)
-		for p in out:
-			self.players.remove(p)
-		for i in range(2):
-			for p in self.players:
-				if p.betBox>0:
-					self.dealCard(p)
-		self.dealCard(self.dealer)
-		self.disp()
-		for p in self.players:
-			self.handleDecisions(p)
-		self.dealCard(self.dealer)
-		self.dealer.disp()
-		p=self.dealer
-		self.handleDecisions(p)
-		self.dealer.judge(self.players)
-	def handleDecisions(self,p):
-		d=-1
-		while d!=0 and self.dealer.eval(p.hand)<21:
-			d=p.decide()
-			if d==0:
-				pass
-			elif d==1:
-				card=self.dealCard(p)
-				p.disp()
+		self.dealer.step(self.players)
 	def disp(self):
 		for p in self.players:
 			p.disp()
-#			v=self.dealer.eval(p.hand)
-#			print v
 #		self.deck.printAll()
 		self.dealer.disp()
 	def status(self):
