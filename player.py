@@ -78,7 +78,7 @@ class Human(Player):
 				return False
 	def decide(self):
 		print 'Player '+str(self.pid)+':\t',
-		print '(h)it/(s)tand?\t',
+		print '(h)it/(s)tand/(d)ouble?\t',
 		c=raw_input()
 		if c=='':
 			d='stand'
