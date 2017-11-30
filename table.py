@@ -1,9 +1,7 @@
 from deck import *
 from player import *
-import random,time
 class Table(object):
 	def __init__(self,nPlayers,nDecks,bankroll,minBet,bjmultiplier):
-		random.seed(time.time)
 		self.bjmultiplier=bjmultiplier
 		self.nPlayers=nPlayers+1
 		self.deck=Deck(nDecks)

@@ -1,4 +1,4 @@
-import random
+import random,time
 class Card(object):
 	def __init__(self,n):
 		self.n=n
@@ -43,6 +43,7 @@ class Deck(object):
 		self.nDecks=nDecks
 		self.nCards=nDecks*52
 		self.refill()
+		random.seed(time.time())
 	def refill(self):
 		self.deck=[]
 		for i in range(self.nDecks):

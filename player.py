@@ -1,4 +1,4 @@
-import random,time
+import random
 class Player(object):
 	def __init__(self,pid,bankroll):
 		self.hand=[]
