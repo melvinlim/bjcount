@@ -28,6 +28,8 @@ class Player(object):
 	def win(self,amount):
 		self.bankroll+=amount+self.betBox
 		self.gamesWon+=1
+	def payout(self,amount):
+		self.bankroll+=amount
 	def disp(self):
 		print 'Player '+str(self.pid)+' ('+str(self.bankroll)+'):\t',
 		s=''
@@ -44,7 +46,7 @@ class Player(object):
 		print 'Player '+str(self.pid)+':',
 		print '\twins/games: '+str(winsOverGames),
 		print '\tearnings/game: '+str(earningsPerGame)
-	def decide(self):
+	def decide(self,first):
 		d=random.randint(0,1)
 		if d==0:
 			return 'stand'
@@ -53,7 +55,7 @@ class Player(object):
 class Stands(Player):
 	def __init__(self,pid,bankroll):
 		super(Stands,self).__init__(pid,bankroll)
-	def decide(self):
+	def decide(self,first):
 		return 'stand'
 class Human(Player):
 	def __init__(self,pid,bankroll):
@@ -76,9 +78,12 @@ class Human(Player):
 				return True
 			else:
 				return False
-	def decide(self):
+	def decide(self,first=False):
 		print 'Player '+str(self.pid)+':\t',
-		print '(h)it/(s)tand/(d)ouble?\t',
+		if first==True:
+			print '(h)it/(s)tand/(d)ouble/s(u)rrender?\t',
+		else:
+			print '(h)it/(s)tand/(d)ouble?\t',
 		c=raw_input()
 		if c=='':
 			d='stand'
@@ -89,4 +94,6 @@ class Human(Player):
 		elif c=='d':
 			self.makeBet(self.betBox)
 			d='double'
+		elif first==True and c=='u':
+			d='surrender'
 		return d

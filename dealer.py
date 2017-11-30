@@ -46,8 +46,13 @@ class Dealer(Player):
 				self.dealCard(p)
 		self.dealCard(self)
 		self.table.disp()
+		tbr=[]
 		for p in activePlayers:
-			self.handleDecisions(p)
+			x=self.handleDecisions(p)
+			tbr.append(x)
+		for p in tbr:
+			if p!=None:
+				activePlayers.remove(p)
 		self.dealCard(self)
 		self.disp()
 		self.handleDecisions(self)
@@ -75,7 +80,7 @@ class Dealer(Player):
 		for p in activePlayers:
 			p.discard()
 		self.discard()
-	def decide(self):
+	def decide(self,first):
 		return self.type1()
 	def dealCard(self,p):
 		card=self.table.deck.pop()
@@ -121,10 +126,17 @@ class Dealer(Player):
 		return winners,ties
 	def handleDecisions(self,p):
 		d=''
-		while d!='stand' and d!='double' and self.evalHand(p.hand)<21:
-			d=p.decide()
+		first=True
+		while d!='stand' and d!='double' and d!='surrender' and self.evalHand(p.hand)<21:
+			d=p.decide(first)
 			if d=='stand':
-				pass
+				return None
 			elif d=='hit' or d=='double':
 				card=self.dealCard(p)
 				p.disp()
+			elif first==True and d=='surrender':
+				p.payout(0.5*p.betBox)
+				p.discard()
+				return p
+			first=False
+		return None
