@@ -17,17 +17,6 @@ class Table(object):
 		p=Stands(i+1,bankroll)
 		self.players.append(p)
 		self.dealer=Dealer(i+2,bankroll,self)
-	def newGame(self):
-		self.deck.shuffle()
-	def dealCard(self,p):
-		card=self.deck.pop()
-		if card==None:
-			print 'out of cards.  reshuffling.'
-			self.deck.refill()
-			self.deck.shuffle()
-			card=self.deck.pop()
-		p.receive(card)
-		return card
 	def round(self):
 		self.dealer.step(self.players)
 	def disp(self):

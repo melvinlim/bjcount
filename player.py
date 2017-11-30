@@ -37,6 +37,7 @@ class Dealer(Player):
 	def __init__(self,pid,bankroll,table):
 		super(Dealer,self).__init__(pid,bankroll)
 		self.table=table
+		self.table.deck.shuffle()
 	def disp(self):
 		print 'Dealer:\t\t',
 		s=''
@@ -76,12 +77,12 @@ class Dealer(Player):
 		for i in range(2):
 			for p in players:
 				if p.betBox>0:
-					self.table.dealCard(p)
-		self.table.dealCard(self)
+					self.dealCard(p)
+		self.dealCard(self)
 		self.table.disp()
 		for p in players:
 			self.handleDecisions(p)
-		self.table.dealCard(self)
+		self.dealCard(self)
 		self.disp()
 		self.handleDecisions(self)
 		winners,ties=self.evalAll(players)
@@ -110,6 +111,15 @@ class Dealer(Player):
 		self.discard()
 	def decide(self):
 		return self.type1()
+	def dealCard(self,p):
+		card=self.table.deck.pop()
+		if card==None:
+			print 'out of cards.  reshuffling.'
+			self.table.deck.refill()
+			self.table.deck.shuffle()
+			card=self.table.deck.pop()
+		p.receive(card)
+		return card
 	def evalHand(self,hand):
 		v=0
 		aces=False
@@ -150,7 +160,7 @@ class Dealer(Player):
 			if d==0:
 				pass
 			elif d==1:
-				card=self.table.dealCard(p)
+				card=self.dealCard(p)
 				p.disp()
 class Stands(Player):
 	def __init__(self,pid,bankroll):
