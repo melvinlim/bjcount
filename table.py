@@ -1,5 +1,6 @@
 from deck import *
 from player import *
+from dealer import *
 class Table(object):
 	def __init__(self,nPlayers,nDecks,bankroll,minBet,bjmultiplier):
 		self.bjmultiplier=bjmultiplier
