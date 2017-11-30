@@ -23,11 +23,11 @@ class Dealer(Player):
 			if (v+10)<=21:
 				v+=10
 		if v<17:
-			return 1
+			return 'hit'
 		elif v==17 and aces==True:
-			return 1
+			return 'hit'
 		else:
-			return 0
+			return 'stand'
 	def step(self,players):
 		activePlayers=[]
 		for p in players:
@@ -120,11 +120,11 @@ class Dealer(Player):
 				ties.append(p)
 		return winners,ties
 	def handleDecisions(self,p):
-		d=-1
-		while d!=0 and self.evalHand(p.hand)<21:
+		d=''
+		while d!='stand' and d!='double' and self.evalHand(p.hand)<21:
 			d=p.decide()
-			if d==0:
+			if d=='stand':
 				pass
-			elif d==1:
+			elif d=='hit' or d=='double':
 				card=self.dealCard(p)
 				p.disp()

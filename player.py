@@ -7,10 +7,11 @@ class Player(object):
 		self.startingBankroll=bankroll
 		self.gamesPlayed=0
 		self.gamesWon=0
+		self.betBox=0
 	def makeBet(self,amount):
 		assert amount<=self.bankroll
 		self.bankroll-=amount
-		self.betBox=amount
+		self.betBox+=amount
 	def betDecision(self,minB,maxB):
 		if self.bankroll>=minB:
 			self.makeBet(minB)
@@ -44,12 +45,16 @@ class Player(object):
 		print '\twins/games: '+str(winsOverGames),
 		print '\tearnings/game: '+str(earningsPerGame)
 	def decide(self):
-		return random.randint(0,1)
+		d=random.randint(0,1)
+		if d==0:
+			return 'stand'
+		else:
+			return 'hit'
 class Stands(Player):
 	def __init__(self,pid,bankroll):
 		super(Stands,self).__init__(pid,bankroll)
 	def decide(self):
-		return 0
+		return 'stand'
 class Human(Player):
 	def __init__(self,pid,bankroll):
 		super(Human,self).__init__(pid,bankroll)
@@ -76,9 +81,12 @@ class Human(Player):
 		print '(h)it/(s)tand?\t',
 		c=raw_input()
 		if c=='':
-			d=0
+			d='stand'
 		elif c=='h':
-			d=1
+			d='hit'
 		elif c=='s':
-			d=0
+			d='stand'
+		elif c=='d':
+			self.makeBet(self.betBox)
+			d='double'
 		return d
