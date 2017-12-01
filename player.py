@@ -44,7 +44,7 @@ class Player(object):
 		print 'Player '+str(self.pid)+':',
 		print '\twins/games: '+str(winsOverGames),
 		print '\tearnings/game: '+str(earningsPerGame)
-	def decide(self,first):
+	def decide(self,first,hand):
 		d=random.randint(0,1)
 		if d==0:
 			return 'stand'
@@ -53,7 +53,7 @@ class Player(object):
 class Stands(Player):
 	def __init__(self,pid,bankroll):
 		super(Stands,self).__init__(pid,bankroll)
-	def decide(self,first):
+	def decide(self,first,hand):
 		return 'stand'
 class Human(Player):
 	def __init__(self,pid,bankroll):
@@ -76,12 +76,21 @@ class Human(Player):
 				return True
 			else:
 				return False
-	def decide(self,first=False):
-		print 'Player '+str(self.pid)+':\t',
-		if first==True:
-			print '(h)it/(s)tand/(d)ouble/s(u)rrender?\t',
+	def decide(self,first,hand):
+		if hand[0].bjv==hand[1].bjv:
+			canSplit=True
 		else:
-			print '(h)it/(s)tand/(d)ouble?\t',
+			canSplit=False
+		print 'Player '+str(self.pid)+':\t',
+		options=''
+		if first==True:
+			options+='(h)it/(s)tand/(d)ouble/s(u)rrender'
+		else:
+			options+='(h)it/(s)tand/(d)ouble'
+		if canSplit:
+			options+='/s(p)lit'
+		options+='?\t'
+		print options,
 		c=raw_input()
 		if c=='':
 			d='stand'
@@ -94,6 +103,6 @@ class Human(Player):
 			d='double'
 		elif first==True and c=='u':
 			d='surrender'
-		elif c=='p':
+		elif canSplit and c=='p':
 			d='split'
 		return d

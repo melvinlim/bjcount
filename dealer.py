@@ -90,7 +90,7 @@ class Dealer(Player):
 		for p in activePlayers:
 			p.discard()
 		self.discard()
-	def decide(self,first):
+	def decide(self,first,hand):
 		return self.type1()
 	def dealCard(self,hand):
 		card=self.table.deck.pop()
@@ -147,8 +147,8 @@ class Dealer(Player):
 	def handleDecisions(self,p):
 		d=''
 		first=True
-		while d!='stand' and d!='double' and d!='surrender' and self.evalHand(p.hand)<21:
-			d=p.decide(first)
+		while d!='double' and d!='surrender' and self.evalHand(p.hand)<21:
+			d=p.decide(first,p.hand)
 			if d=='stand':
 				return None
 			elif d=='hit' or d=='double':
@@ -185,8 +185,8 @@ class Dealer(Player):
 		print s
 		first=False
 		d=''
-		while d!='stand' and self.evalHand(h)<21:
-			d=p.decide(first)
+		while self.evalHand(h)<21:
+			d=p.decide(first,h)
 			if d=='stand':
 				return None
 			elif d=='hit':
