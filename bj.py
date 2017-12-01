@@ -3,23 +3,13 @@ from player import *
 def initPlayers(bankroll,humanPlayer=False):
 	nPlayers=1
 	players=[]
-	i=0
 	for i in range(nPlayers):
-		p=Player(i,bankroll)
-		players.append(p)
-	i+=1
-	p=Stands(i,bankroll)
-	players.append(p)
-	i+=1
-	p=BasicNoDouble(i,bankroll)
-	players.append(p)
-	i+=1
-	p=BasicDouble(i,bankroll)
-	players.append(p)
+		players.append(Player(len(players),bankroll))
+	players.append(Stands(len(players),bankroll))
+	players.append(BasicNoDouble(len(players),bankroll))
+	players.append(BasicDouble(len(players),bankroll))
 	if humanPlayer==True:
-		i+=1
-		p=Human(i,bankroll)
-		players.append(p)
+		players.append(Human(len(players),bankroll))
 	return players
 print 'update interval?\n[1000]',
 x=raw_input()
