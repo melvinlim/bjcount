@@ -8,7 +8,8 @@ def initPlayers(bankroll,humanPlayer=False):
 		p=Player(i,bankroll)
 		players.append(p)
 	i+=1
-	p=Stands(i,bankroll)
+	#p=Stands(i,bankroll)
+	p=BasicNoDouble(i,bankroll)
 	players.append(p)
 	if humanPlayer==True:
 		i+=1

@@ -80,7 +80,7 @@ class Dealer(Player):
 		for p in activePlayers:
 			p.discard()
 		self.discard()
-	def decide(self,first,hand):
+	def decide(self,table,first,hand):
 		return self.type1()
 	def dealCard(self,hand):
 		card=self.table.deck.pop()
@@ -92,7 +92,6 @@ class Dealer(Player):
 		hand.add(card)
 		return card
 	def evalHand(self,hand):
-		aces=hand.hasAce
 		if hand.isSoft():
 			v=hand.handValue+10
 		else:
@@ -132,7 +131,7 @@ class Dealer(Player):
 		d=''
 		first=True
 		while d!='double' and d!='surrender' and self.evalHand(p.hand)<21:
-			d=p.decide(first,p.hand)
+			d=p.decide(self.table,first,p.hand)
 			if d=='stand':
 				return None
 			elif d=='hit' or d=='double':
@@ -169,11 +168,11 @@ class Dealer(Player):
 		first=False
 		d=''
 		while self.evalHand(h)<21:
-			d=p.decide(first,h)
+			d=p.decide(self.table,first,h)
 			if d=='stand':
 				return None
 			elif d=='hit':
-				card=self.dealCard(h)
+				self.dealCard(h)
 				print 'split hand:\t',
 				print h.textString
 			elif d=='split':
@@ -186,3 +185,6 @@ class Dealer(Player):
 				p.hands.append(h1)
 				p.hands.append(h2)
 				return h
+			else:
+				print 'cannot surrender split hand'
+				return None

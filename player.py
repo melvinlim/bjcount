@@ -42,7 +42,7 @@ class Player(object):
 		print 'Player '+str(self.pid)+':',
 		print '\twins/games: '+str(winsOverGames),
 		print '\tearnings/game: '+str(earningsPerGame)
-	def decide(self,first,hand):
+	def decide(self,table,first,hand):
 		d=random.randint(0,1)
 		if d==0:
 			return 'stand'
@@ -51,7 +51,7 @@ class Player(object):
 class Stands(Player):
 	def __init__(self,pid,bankroll):
 		super(Stands,self).__init__(pid,bankroll)
-	def decide(self,first,hand):
+	def decide(self,table,first,hand):
 		return 'stand'
 class Human(Player):
 	def __init__(self,pid,bankroll):
@@ -74,7 +74,7 @@ class Human(Player):
 				return True
 			else:
 				return False
-	def decide(self,first,hand):
+	def decide(self,table,first,hand):
 		print 'Player '+str(self.pid)+':\t',
 		options=''
 		if first==True:
@@ -100,3 +100,90 @@ class Human(Player):
 		elif hand.canSplit() and c=='p':
 			d='split'
 		return d
+class BasicNoDouble(Player):
+	def __init__(self,pid,bankroll):
+		super(BasicNoDouble,self).__init__(pid,bankroll)
+	def decide(self,table,first,hand):
+		dealerCard=table.dealer.hand.cards[0].bjv
+		if dealerCard==0:
+			dealerCard=11
+		if hand.canSplit():
+			if hand.hasAce:
+				return 'split'
+			elif hand.handValue==20:
+				return 'stand'
+			elif hand.handValue==18:
+				if dealerCard<7:
+					return 'split'
+				elif dealerCard>9:
+					return 'stand'
+				elif dealerCard>7:
+					return 'split'
+				else:
+					return 'stand'
+			elif hand.handValue==16:
+				return 'split'
+			elif hand.handValue==14:
+				if dealerCard<8:
+					return 'split'
+				else:
+					return 'hit'
+			elif hand.handValue==12:
+				if dealerCard<7:
+					return 'split'
+				else:
+					return 'hit'
+			elif hand.handValue==10:
+				return 'hit'
+			elif hand.handValue==8:
+				if dealerCard>6 or dealerCard<5:
+					return 'hit'
+				else:
+					return 'split'
+			else:
+				if dealerCard<8:
+					return 'split'
+				else:
+					return 'hit'
+		elif self.hand.isSoft():
+			if hand.handValue>8:
+				return 'stand'
+			elif hand.handValue==8:
+				if dealerCard<9:
+					return 'stand'
+				else:
+					return 'hit'
+			else:
+				return 'hit'
+		else:
+			if hand.handValue<12:
+				return 'hit'
+			elif hand.handValue==12:
+				if dealerCard>6:
+					return 'hit'
+				elif dealerCard<4:
+					return 'hit'
+				else:
+					return 'stand'
+			elif hand.handValue==13 or hand.handValue==14:
+				if dealerCard>6:
+					return 'hit'
+				else:
+					return 'stand'
+			elif hand.handValue==15:
+				if dealerCard==10:
+					return 'surrender'
+				elif dealerCard>6:
+					return 'hit'
+				else:
+					return 'stand'
+			elif hand.handValue==16:
+				if dealerCard>8:
+					return 'surrender'
+				elif dealerCard>6:
+					return 'hit'
+				else:
+					return 'stand'
+			else:
+				return 'stand'
+		return 'stand'
