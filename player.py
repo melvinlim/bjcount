@@ -1,8 +1,9 @@
 import random
+from hand import *
 class Player(object):
 	def __init__(self,pid,bankroll):
 		self.split=False
-		self.hand=[]
+		self.hand=Hand()
 		self.pid=pid
 		self.bankroll=bankroll
 		self.startingBankroll=bankroll
@@ -20,7 +21,7 @@ class Player(object):
 		else:
 			return False
 	def discard(self):
-		self.hand=[]
+		self.hand=Hand()
 		self.betBox=0
 		self.gamesPlayed+=1
 	def win(self,amount):
@@ -30,10 +31,7 @@ class Player(object):
 		self.bankroll+=amount
 	def disp(self):
 		print 'Player '+str(self.pid)+' ('+str(self.bankroll)+'):\t',
-		s=''
-		for c in self.hand:
-			s+=c.cardString+' '
-		print s
+		print self.hand.textString
 	def status(self):
 		if self.gamesPlayed==0:
 			winsOverGames=0
@@ -77,17 +75,13 @@ class Human(Player):
 			else:
 				return False
 	def decide(self,first,hand):
-		if hand[0].bjv==hand[1].bjv:
-			canSplit=True
-		else:
-			canSplit=False
 		print 'Player '+str(self.pid)+':\t',
 		options=''
 		if first==True:
 			options+='(h)it/(s)tand/(d)ouble/s(u)rrender'
 		else:
 			options+='(h)it/(s)tand/(d)ouble'
-		if canSplit:
+		if hand.canSplit():
 			options+='/s(p)lit'
 		options+='?\t'
 		print options,
@@ -103,6 +97,6 @@ class Human(Player):
 			d='double'
 		elif first==True and c=='u':
 			d='surrender'
-		elif canSplit and c=='p':
+		elif hand.canSplit() and c=='p':
 			d='split'
 		return d

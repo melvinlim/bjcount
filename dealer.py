@@ -6,24 +6,14 @@ class Dealer(Player):
 		self.table.deck.shuffle()
 	def disp(self):
 		print 'Dealer:\t\t',
-		s=''
-		for c in self.hand:
-			s+=c.cardString+' '
-		print s
+		print self.hand.textString
 	def type1(self):
-		v=0
-		aces=False
-		soft=False
-		for c in self.hand:
-			if c.bjv==0:
-				aces=True
-				v+=1
-			else:
-				v+=c.bjv
-		if aces==True:
-			if (v+10)<=21:
-				soft=True
-				v+=10
+		aces=self.hand.hasAce
+		soft=self.hand.isSoft()
+		if soft:
+			v=self.hand.handValue+10
+		else:
+			v=self.hand.handValue
 		if v<17:
 			return 'hit'
 		elif v==17 and aces==True and soft==True:
@@ -99,21 +89,15 @@ class Dealer(Player):
 			self.table.deck.refill()
 			self.table.deck.shuffle()
 			card=self.table.deck.pop()
-		hand.append(card)
+		hand.add(card)
 		return card
 	def evalHand(self,hand):
-		v=0
-		aces=False
-		for c in hand:
-			if c.bjv==0:
-				aces=True
-				v+=1
-			else:
-				v+=c.bjv
-		if aces==True:
-			if (v+10)<=21:
-				v+=10
-		if v==21 and len(hand)==2:
+		aces=hand.hasAce
+		if hand.isSoft():
+			v=hand.handValue+10
+		else:
+			v=hand.handValue
+		if v==21 and len(hand.cards)==2:
 			return 9999
 		return v
 	def evalAll(self,players):
@@ -127,7 +111,7 @@ class Dealer(Player):
 				p.splitWins=0
 				p.splitTies=0
 				for h in p.hands:
-					t=self.evalHand(p.hand)
+					t=self.evalHand(h)
 					if t>dt and t<=21:
 						p.splitWins+=1
 					elif t==dt:
@@ -160,8 +144,10 @@ class Dealer(Player):
 				return p
 			elif d=='split':
 				p.split=True
-				h1=[p.hand[0]]
-				h2=[p.hand[1]]
+				h1=Hand()
+				h2=Hand()
+				h1.add(p.hand.cards[0])
+				h2.add(p.hand.cards[1])
 				self.dealCard(h1)
 				self.dealCard(h2)
 				p.hands=[h1,h2]
@@ -179,10 +165,7 @@ class Dealer(Player):
 			p.hands.remove(h)
 	def handleSplitHand(self,p,h):
 		print 'split hand:\t',
-		s=''
-		for c in h:
-			s+=c.cardString+' '
-		print s
+		print h.textString
 		first=False
 		d=''
 		while self.evalHand(h)<21:
@@ -192,13 +175,12 @@ class Dealer(Player):
 			elif d=='hit':
 				card=self.dealCard(h)
 				print 'split hand:\t',
-				s=''
-				for c in h:
-					s+=c.cardString+' '
-				print s
+				print h.textString
 			elif d=='split':
-				h1=[h[0]]
-				h2=[h[1]]
+				h1=Hand()
+				h2=Hand()
+				h1.add(h.cards[0])
+				h2.add(h.cards[1])
 				self.dealCard(h1)
 				self.dealCard(h2)
 				p.hands.append(h1)
