@@ -96,6 +96,7 @@ class Human(Player):
 		elif first==True and c=='u':
 			d='surrender'
 		elif hand.canSplit() and c=='p':
+			gamesPlayed+=1
 			d='split'
 		return d
 class BasicNoDouble(Player):

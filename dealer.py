@@ -72,7 +72,7 @@ class Dealer(Player):
 						p.win(h.wager)
 						p.splitWins+=1
 					elif h.handTied:
-						p.win(0)
+						p.payout(h.wager)
 						p.splitTies+=1
 				p.splitHands=len(p.hands)
 				print 'Player '+str(p.pid)+': w/t/h:'+str(p.splitWins)+'/'+str(p.splitTies)+'/'+str(p.splitHands)
