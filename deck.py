@@ -2,7 +2,7 @@ import random,time
 class Card(object):
 	def __init__(self,n):
 		self.n=n
-		self.tmpval=n%13
+		self.tmpVal=n%13
 		self.s=n/13
 		if self.s==0:
 			suit='c'
@@ -14,24 +14,24 @@ class Card(object):
 			suit='s'
 		else:
 			assert False
-		if self.tmpval==0:
+		if self.tmpVal==0:
 			self.bjv=10
 			value='K'
-		elif self.tmpval==1:
+		elif self.tmpVal==1:
 			self.bjv=0
 			value='A'
-		elif self.tmpval==10:
+		elif self.tmpVal==10:
 			self.bjv=10
 			value='T'
-		elif self.tmpval==11:
+		elif self.tmpVal==11:
 			self.bjv=10
 			value='J'
-		elif self.tmpval==12:
+		elif self.tmpVal==12:
 			self.bjv=10
 			value='Q'
 		else:
-			self.bjv=self.tmpval
-			value=str(self.tmpval)
+			self.bjv=self.tmpVal
+			value=str(self.tmpVal)
 		self.suit=suit
 		self.value=value
 		self.textString=self.value+self.suit
