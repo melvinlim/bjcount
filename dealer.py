@@ -139,6 +139,7 @@ class Dealer(Player):
 			if d=='stand':
 				return None
 			elif d=='double':
+				p.makeBet(p.hand.wager)
 				card=self.dealCard(p.hand)
 				p.disp()
 				return None
@@ -194,7 +195,7 @@ class Dealer(Player):
 				print h.textString
 			elif d=='double':
 				self.dealCard(h)
-				p.hand.wager-=h.wager
+				p.bankroll-=h.wager
 				h.wager+=h.wager
 				print 'split hand:\t',
 				print h.textString

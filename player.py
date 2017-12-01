@@ -91,7 +91,6 @@ class Human(Player):
 		elif c=='s':
 			d='stand'
 		elif c=='d':
-			self.makeBet(self.hand.wager)
 			d='double'
 		elif first==True and c=='u':
 			d='surrender'
