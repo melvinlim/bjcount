@@ -13,6 +13,7 @@ class Dealer(Player):
 	def type1(self):
 		v=0
 		aces=False
+		soft=False
 		for c in self.hand:
 			if c.bjv==0:
 				aces=True
@@ -21,10 +22,11 @@ class Dealer(Player):
 				v+=c.bjv
 		if aces==True:
 			if (v+10)<=21:
+				soft=True
 				v+=10
 		if v<17:
 			return 'hit'
-		elif v==17 and aces==True:
+		elif v==17 and aces==True and soft==True:
 			return 'hit'
 		else:
 			return 'stand'
