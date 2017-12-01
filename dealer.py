@@ -25,11 +25,11 @@ class Dealer(Player):
 		for p in players:
 			p.betDecision(self.table.minBet,self.table.maxBet)
 		for p in players:
-			if p.betBox>=self.table.minBet and p.betBox<=self.table.maxBet:
+			if p.hand.wager>=self.table.minBet and p.hand.wager<=self.table.maxBet:
 				activePlayers.append(p)
 			else:
-				p.bankroll+=p.betBox
-				p.betBox=0
+				p.bankroll+=p.hand.wager
+				p.hand.wager=0
 		if len(activePlayers)==0:
 			print 'no players'
 			return
@@ -58,17 +58,17 @@ class Dealer(Player):
 		s=''
 		for w in winners:
 			if w.blackjack==True:
-				w.win(w.betBox*self.table.bjmultiplier)
+				w.win(w.hand.wager*self.table.bjmultiplier)
 			else:
-				w.win(w.betBox)
+				w.win(w.hand.wager)
 			s+=str(w.pid)+' '
 		print s
 		for p in activePlayers:
 			if p.split:
 				p.splitHands=len(p.hands)
-				p.bankroll-=p.betBox*(p.splitHands-1)
-				p.bankroll+=p.betBox*p.splitTies
-				p.bankroll+=2*p.betBox*p.splitWins
+				p.bankroll-=p.hand.wager*(p.splitHands-1)
+				p.bankroll+=p.hand.wager*p.splitTies
+				p.bankroll+=2*p.hand.wager*p.splitWins
 				print 'Player '+str(p.pid)+': w/t/h:'+str(p.splitWins)+'/'+str(p.splitTies)+'/'+str(p.splitHands)
 				p.split=False
 		if ties:
@@ -138,7 +138,7 @@ class Dealer(Player):
 				card=self.dealCard(p.hand)
 				p.disp()
 			elif first==True and d=='surrender':
-				p.payout(0.5*p.betBox)
+				p.payout(0.5*p.hand.wager)
 				p.discard()
 				return p
 			elif d=='split':

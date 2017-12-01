@@ -9,11 +9,10 @@ class Player(object):
 		self.startingBankroll=bankroll
 		self.gamesPlayed=0
 		self.gamesWon=0
-		self.betBox=0
 	def makeBet(self,amount):
 		assert amount<=self.bankroll
 		self.bankroll-=amount
-		self.betBox+=amount
+		self.hand.wager+=amount
 	def betDecision(self,minB,maxB):
 		if self.bankroll>=minB:
 			self.makeBet(minB)
@@ -22,10 +21,9 @@ class Player(object):
 			return False
 	def discard(self):
 		self.hand=Hand()
-		self.betBox=0
 		self.gamesPlayed+=1
 	def win(self,amount):
-		self.bankroll+=amount+self.betBox
+		self.bankroll+=amount+self.hand.wager
 		self.gamesWon+=1
 	def payout(self,amount):
 		self.bankroll+=amount
@@ -93,7 +91,7 @@ class Human(Player):
 		elif c=='s':
 			d='stand'
 		elif c=='d':
-			self.makeBet(self.betBox)
+			self.makeBet(self.hand.wager)
 			d='double'
 		elif first==True and c=='u':
 			d='surrender'
