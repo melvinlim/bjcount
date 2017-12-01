@@ -65,10 +65,16 @@ class Dealer(Player):
 		print s
 		for p in activePlayers:
 			if p.split:
+				p.splitWins=0
+				p.splitTies=0
+				for h in p.hands:
+					if h.handWon:
+						p.win(h.wager)
+						p.splitWins+=1
+					elif h.handTied:
+						p.win(0)
+						p.splitTies+=1
 				p.splitHands=len(p.hands)
-				p.bankroll-=p.hand.wager*(p.splitHands-1)
-				p.bankroll+=p.hand.wager*p.splitTies
-				p.bankroll+=2*p.hand.wager*p.splitWins
 				print 'Player '+str(p.pid)+': w/t/h:'+str(p.splitWins)+'/'+str(p.splitTies)+'/'+str(p.splitHands)
 				p.split=False
 		if ties:
@@ -107,14 +113,12 @@ class Dealer(Player):
 			dt=0
 		for p in players:
 			if p.split:
-				p.splitWins=0
-				p.splitTies=0
 				for h in p.hands:
 					t=self.evalHand(h)
 					if t>dt and t<=21:
-						p.splitWins+=1
+						h.handWon=True
 					elif t==dt:
-						p.splitTies+=1
+						h.handTied=True
 			else:
 				p.blackjack=False
 				t=self.evalHand(p.hand)
@@ -149,6 +153,10 @@ class Dealer(Player):
 				h2.add(p.hand.cards[1])
 				self.dealCard(h1)
 				self.dealCard(h2)
+				h1.wager+=p.hand.wager
+				h2.wager+=p.hand.wager
+				p.bankroll-=p.hand.wager
+				p.hand=Hand()
 				p.hands=[h1,h2]
 				self.handleSplit(p)
 				return None
@@ -175,6 +183,13 @@ class Dealer(Player):
 				self.dealCard(h)
 				print 'split hand:\t',
 				print h.textString
+			elif d=='double':
+				self.dealCard(h)
+				p.hand.wager-=h.wager
+				h.wager+=h.wager
+				print 'split hand:\t',
+				print h.textString
+				return None
 			elif d=='split':
 				h1=Hand()
 				h2=Hand()
@@ -182,6 +197,9 @@ class Dealer(Player):
 				h2.add(h.cards[1])
 				self.dealCard(h1)
 				self.dealCard(h2)
+				h1.wager+=h.wager
+				h2.wager+=h.wager
+				p.bankroll-=h.wager
 				p.hands.append(h1)
 				p.hands.append(h2)
 				return h

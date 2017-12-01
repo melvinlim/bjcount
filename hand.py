@@ -5,6 +5,8 @@ class Hand(object):
 		self.wager=0
 		self.handValue=0
 		self.textString=''
+		self.handWon=False
+		self.handTied=False
 	def add(self,card):
 		if card.bjv==0:
 			self.hasAce=True
