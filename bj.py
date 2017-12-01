@@ -1,10 +1,8 @@
 from table import *
 from player import *
 def initPlayers(bankroll,humanPlayer=False):
-	nPlayers=1
 	players=[]
-	for i in range(nPlayers):
-		players.append(Player(len(players),bankroll))
+	players.append(Player(len(players),bankroll))
 	players.append(Stands(len(players),bankroll))
 	players.append(BasicNoDouble(len(players),bankroll))
 	players.append(BasicDouble(len(players),bankroll))
@@ -29,7 +27,6 @@ except:
 bankroll=100000
 players=initPlayers(bankroll,humanPlayer)
 t=Table(players=players,nDecks=4,bankroll=bankroll,minBet=10,maxBet=20,bjmultiplier=1.5)
-#t=Table(nPlayers=4,nDecks=2,bankroll=100,minBet=10,bjmultiplier=1.5)
 handsPlayed=0
 while True:
 	print 'hands played: '+str(handsPlayed)
