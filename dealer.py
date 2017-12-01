@@ -134,17 +134,25 @@ class Dealer(Player):
 	def handleDecisions(self,p):
 		d=''
 		first=True
-		while d!='double' and d!='surrender' and self.evalHand(p.hand)<21:
+		while self.evalHand(p.hand)<21:
 			d=p.decide(self.table,first,p.hand)
 			if d=='stand':
 				return None
-			elif d=='hit' or d=='double':
+			elif d=='double':
 				card=self.dealCard(p.hand)
 				p.disp()
-			elif first==True and d=='surrender':
-				p.payout(0.5*p.hand.wager)
-				p.discard()
-				return p
+				return None
+			elif d=='hit':
+				card=self.dealCard(p.hand)
+				p.disp()
+			elif d=='surrender':
+				if first==True:
+					p.payout(0.5*p.hand.wager)
+					p.discard()
+					return p
+				else:
+					card=self.dealCard(p.hand)
+					p.disp()
 			elif d=='split':
 				p.gamesPlayed+=1
 				p.split=True
