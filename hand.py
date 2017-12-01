@@ -20,5 +20,6 @@ class Hand(object):
 		return False
 	def canSplit(self):
 		if self.cards[0].bjv==self.cards[1].bjv:
-			return True
+			if len(self.cards)==2:
+				return True
 		return False
