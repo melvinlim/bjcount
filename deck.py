@@ -2,7 +2,7 @@ import random,time
 class Card(object):
 	def __init__(self,n):
 		self.n=n
-		self.v=n%13
+		self.tmpval=n%13
 		self.s=n/13
 		if self.s==0:
 			suit='c'
@@ -14,24 +14,24 @@ class Card(object):
 			suit='s'
 		else:
 			assert False
-		if self.v==0:
+		if self.tmpval==0:
 			self.bjv=10
 			value='K'
-		elif self.v==1:
+		elif self.tmpval==1:
 			self.bjv=0
 			value='A'
-		elif self.v==10:
+		elif self.tmpval==10:
 			self.bjv=10
 			value='T'
-		elif self.v==11:
+		elif self.tmpval==11:
 			self.bjv=10
 			value='J'
-		elif self.v==12:
+		elif self.tmpval==12:
 			self.bjv=10
 			value='Q'
 		else:
-			self.bjv=self.v
-			value=str(self.v)
+			self.bjv=self.tmpval
+			value=str(self.tmpval)
 		self.suit=suit
 		self.value=value
 		self.textString=self.value+self.suit
@@ -60,11 +60,11 @@ class Deck(object):
 		card=Card(i)
 		self.deck.append(card)
 	def printAll(self):
-		for c in self.deck:
-			c.disp()
+		for card in self.deck:
+			card.disp()
 	def pop(self):
 		try:
-			c=self.deck.pop()
+			card=self.deck.pop()
 		except:
-			c=None
-		return c
+			card=None
+		return card
