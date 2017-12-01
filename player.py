@@ -1,6 +1,7 @@
 import random
 class Player(object):
 	def __init__(self,pid,bankroll):
+		self.split=False
 		self.hand=[]
 		self.pid=pid
 		self.bankroll=bankroll
@@ -93,4 +94,6 @@ class Human(Player):
 			d='double'
 		elif first==True and c=='u':
 			d='surrender'
+		elif c=='p':
+			d='split'
 		return d
