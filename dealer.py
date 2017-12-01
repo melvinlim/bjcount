@@ -146,6 +146,7 @@ class Dealer(Player):
 				p.discard()
 				return p
 			elif d=='split':
+				p.gamesPlayed+=1
 				p.split=True
 				h1=Hand()
 				h2=Hand()
@@ -191,6 +192,7 @@ class Dealer(Player):
 				print h.textString
 				return None
 			elif d=='split':
+				p.gamesPlayed+=1
 				h1=Hand()
 				h2=Hand()
 				h1.add(h.cards[0])

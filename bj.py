@@ -13,6 +13,9 @@ def initPlayers(bankroll,humanPlayer=False):
 	i+=1
 	p=BasicNoDouble(i,bankroll)
 	players.append(p)
+	i+=1
+	p=BasicDouble(i,bankroll)
+	players.append(p)
 	if humanPlayer==True:
 		i+=1
 		p=Human(i,bankroll)
