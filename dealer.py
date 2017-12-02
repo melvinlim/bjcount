@@ -3,7 +3,7 @@ class Dealer(Player):
 	def __init__(self,pid,bankroll,table):
 		super(Dealer,self).__init__(pid,bankroll)
 		self.table=table
-		self.table.deck.shuffle()
+		self.table.shoe.shuffle()
 	def disp(self):
 		print 'Dealer:\t\t',
 		print self.hand.textString
@@ -87,12 +87,12 @@ class Dealer(Player):
 	def decide(self,table,first,hand):
 		return self.type1()
 	def dealCard(self,hand):
-		card=self.table.deck.pop()
+		card=self.table.shoe.pop()
 		if card==None:
 			print 'out of cards.  reshuffling.'
-			self.table.deck.refill()
-			self.table.deck.shuffle()
-			card=self.table.deck.pop()
+			self.table.shoe.refill()
+			self.table.shoe.shuffle()
+			card=self.table.shoe.pop()
 		hand.add(card)
 		return card
 	def evalHand(self,hand):

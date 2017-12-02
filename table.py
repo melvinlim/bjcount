@@ -4,7 +4,7 @@ from dealer import *
 class Table(object):
 	def __init__(self,players,nDecks,bankroll,minBet,maxBet,bjmultiplier):
 		self.bjmultiplier=bjmultiplier
-		self.deck=Deck(nDecks)
+		self.shoe=Shoe(nDecks)
 		self.players=players
 		self.bankroll=bankroll
 		self.minBet=minBet
