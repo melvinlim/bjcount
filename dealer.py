@@ -23,8 +23,6 @@ class Dealer(Player):
 	def step(self,players):
 		activePlayers=[]
 		for p in players:
-			p.betDecision(self.table.minBet,self.table.maxBet)
-		for p in players:
 			if p.hand.wager>=self.table.minBet and p.hand.wager<=self.table.maxBet:
 				activePlayers.append(p)
 			else:

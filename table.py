@@ -11,6 +11,10 @@ class Table(object):
 		self.maxBet=maxBet
 		self.dealer=Dealer(-1,bankroll,self)
 	def round(self):
+		self.tableState='takingBets'
+		for p in self.players:
+			p.betDecision(self.minBet,self.maxBet)
+		self.tableState='allowingDecisions'
 		self.dealer.step(self.players)
 	def disp(self):
 		for p in self.players:
