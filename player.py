@@ -317,10 +317,10 @@ class BasicDoubleR7Count(BasicDouble):
 	def betDecision(self,minB,maxB,table):
 		count=table.shoe.r7count
 		if self.bankroll>=minB:
-			if count>5:
+			if count>10:
+				bet=maxB
+			elif count>5:
 				bet=minB+(maxB-minB)*0.5
-			elif count>10:
-				bet+maxB
 			else:
 				bet=minB
 			self.makeOpeningBet(bet)
