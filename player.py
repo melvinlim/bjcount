@@ -8,8 +8,8 @@ class Player(object):
 		self.pid=pid
 		self.bankroll=bankroll
 		self.startingBankroll=bankroll
-		self.gamesPlayed=0
-		self.gamesWon=0
+		self.handsPlayed=0
+		self.handsWon=0
 	def decideOnInsurance(self):
 		return
 	def makeOpeningBet(self,amount):
@@ -24,22 +24,22 @@ class Player(object):
 			return False
 	def discardHand(self):
 		self.hands=[Hand(self)]
-		self.gamesPlayed+=1
+		self.handsPlayed+=1
 	def win(self,amount):
 		self.bankroll+=amount+self.hands[0].wager
-		self.gamesWon+=1
+		self.handsWon+=1
 	def payout(self,amount):
 		self.bankroll+=amount
 	def disp(self):
 		print 'Player '+str(self.pid)+' ('+str(self.bankroll)+'):\t',
 		print self.hands[0].textString
 	def status(self):
-		if self.gamesPlayed==0:
+		if self.handsPlayed==0:
 			winPercent=0
 			profitPerGame=0
 		else:
-			winPercent=self.gamesWon*100.0/self.gamesPlayed
-			profitPerGame=(self.bankroll-self.startingBankroll)*1.0/self.gamesPlayed
+			winPercent=self.handsWon*100.0/self.handsPlayed
+			profitPerGame=(self.bankroll-self.startingBankroll)*1.0/self.handsPlayed
 		print 'Player '+str(self.pid)+' ('+str(self.bankroll)+'):\t',
 		print 'win%: '+str(winPercent),
 		print '\tprofit/game: '+str(profitPerGame)

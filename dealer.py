@@ -159,7 +159,7 @@ class Dealer(Player):
 					card=self.dealCard(p.hands[0])
 					p.disp()
 			elif d=='split':
-				p.gamesPlayed+=1
+				p.handsPlayed+=1
 				h1=Hand(p)
 				h2=Hand(p)
 				h1.add(p.hands[0].cards[0])
@@ -200,7 +200,7 @@ class Dealer(Player):
 				print h.textString
 				return result
 			elif d=='split':
-				p.gamesPlayed+=1
+				p.handsPlayed+=1
 				h1=Hand(p)
 				h2=Hand(p)
 				h1.add(h.cards[0])
