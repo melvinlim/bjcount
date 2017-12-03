@@ -328,34 +328,26 @@ class BasicDouble(Player):
 				return 'stand'
 		return 'stand'
 class BasicDoubleR7Count(BasicDouble):
-	def __init__(self,pid,bankroll):
+	def __init__(self,pid,bankroll,settings):
 		super(BasicDoubleR7Count,self).__init__(pid,bankroll)
+		self.settings=settings
+	def decideOnInsurance(self):
+		if self.settings.alwaysTakeInsurance:
+			self.bankroll-=self.hands[0].wager/2
+			self.insuranceBet=self.hands[0].wager/2
+		else:
+			return
 	def betDecision(self,minB,maxB,table):
 		count=table.shoe.r7count
+		if self.settings.canSitOut:
+			if count<0:
+				bet=0
+				self.makeOpeningBet(0)
+				return False
 		if self.bankroll>=minB:
 			if count>10:
 				bet=maxB
 			elif count>5:
-				bet=minB+(maxB-minB)*0.5
-			else:
-				bet=minB
-			self.makeOpeningBet(bet)
-			return True
-		else:
-			return False
-class BasicDoubleR7CountSitOut(BasicDouble):
-	def __init__(self,pid,bankroll):
-		super(BasicDoubleR7CountSitOut,self).__init__(pid,bankroll)
-	def betDecision(self,minB,maxB,table):
-		count=table.shoe.r7count
-		if count<0:
-			bet=0
-			self.makeOpeningBet(0)
-			return False
-		if self.bankroll>=minB:
-			if count>20:
-				bet=maxB
-			elif count>15:
 				bet=minB+(maxB-minB)*0.5
 			else:
 				bet=minB

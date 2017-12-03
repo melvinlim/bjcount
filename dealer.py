@@ -135,7 +135,6 @@ class Dealer(Player):
 							h.outcome='losingOutcome'
 		return wins,ties
 	def handleDecisions(self,p):
-		d=''
 		firstDecision=True
 		p.hands[0].updateValue()
 		phv=p.hands[0].trueValue
