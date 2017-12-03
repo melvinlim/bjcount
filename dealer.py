@@ -5,6 +5,9 @@ class Dealer(Player):
 		self.table=table
 		self.table.shoe.shuffle()
 		self.hand=self.hands[0]
+	def discard(self):
+		self.hands=[Hand(self)]
+		self.hand=self.hands[0]
 	def disp(self):
 		print 'Dealer:\t\t',
 		print self.hand.textString
@@ -92,46 +95,36 @@ class Dealer(Player):
 	def evalAll(self,players):
 		wins=[]
 		ties=[]
-		htbe=[]
-		for p in players:
-			if p.split:
-				for h in p.hands:
-					htbe.append(h)
-			else:
-				htbe.append(p.hands[0])
 		dt=self.evalHand(self.hand)
-		if self.hand.isBlackjack:
-			for h in htbe:
-				self.evalHand(h)
-				if h.isBlackjack:
-					ties.append(h.owner)
-					h.owner.payout(h.wager)
-				else:
-					h.outcome='losingOutcome'
-		elif self.hand.isBusted:
-			for h in htbe:
-				self.evalHand(h)
-				if h.isBusted:
-					h.outcome='losingOutcome'
-				else:
-					wins.append(h.owner)
-					h.owner.win(h.wager)
-		else:
-			for h in htbe:
+		for p in players:
+			for h in p.hands:
 				t=self.evalHand(h)
-				if h.isBlackjack:
-					wins.append(h.owner)
-					h.owner.win(h.wager*self.table.bjmultiplier)
-				elif h.isBusted:
-					h.outcome='losingOutcome'
-				elif t>dt:
-					wins.append(h.owner)
-					h.owner.win(h.wager)
-				elif t==dt:
-					ties.append(h.owner)
-					h.owner.payout(h.wager)
+				if self.hand.isBlackjack:
+						if h.isBlackjack:
+							ties.append(h.owner)
+							h.owner.payout(h.wager)
+						else:
+							h.outcome='losingOutcome'
+				elif self.hand.isBusted:
+						if h.isBusted:
+							h.outcome='losingOutcome'
+						else:
+							wins.append(h.owner)
+							h.owner.win(h.wager)
 				else:
-					h.outcome='losingOutcome'
+					if h.isBlackjack:
+						wins.append(h.owner)
+						h.owner.win(h.wager*self.table.bjmultiplier)
+					elif h.isBusted:
+						h.outcome='losingOutcome'
+					elif t>dt:
+						wins.append(h.owner)
+						h.owner.win(h.wager)
+					elif t==dt:
+						ties.append(h.owner)
+						h.owner.payout(h.wager)
+					else:
+						h.outcome='losingOutcome'
 		return wins,ties
 	def handleDecisions(self,p):
 		d=''

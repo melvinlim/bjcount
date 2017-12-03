@@ -21,7 +21,6 @@ class Player(object):
 			return False
 	def discard(self):
 		self.hands=[Hand(self)]
-		self.hand=self.hands[0]
 		self.gamesPlayed+=1
 	def win(self,amount):
 		self.bankroll+=amount+self.hands[0].wager
