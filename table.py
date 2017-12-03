@@ -1,4 +1,4 @@
-from deck import *
+from shoe import *
 #from player import *
 from dealer import *
 class Table(object):
