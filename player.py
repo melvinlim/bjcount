@@ -348,7 +348,7 @@ class BasicDoubleR7CountSitOut(BasicDouble):
 		super(BasicDoubleR7CountSitOut,self).__init__(pid,bankroll)
 	def betDecision(self,minB,maxB,table):
 		count=table.shoe.r7count
-		if count<10:
+		if count<0:
 			bet=0
 			self.makeOpeningBet(0)
 			return False
@@ -369,7 +369,7 @@ class BasicDoubleR7CountSitOutModified(BasicDouble):
 		super(BasicDoubleR7CountSitOutModified,self).__init__(pid,bankroll)
 	def betDecision(self,minB,maxB,table):
 		count=table.shoe.r7count
-		if count<10:
+		if count<0:
 			bet=0
 			self.makeOpeningBet(0)
 			return False
@@ -516,7 +516,7 @@ class BasicDoubleR7CountSitOutModified2(BasicDouble):
 		super(BasicDoubleR7CountSitOutModified2,self).__init__(pid,bankroll)
 	def betDecision(self,minB,maxB,table):
 		count=table.shoe.r7count
-		if count<10 or table.shoe.getDealtRatio()>0.75:
+		if count<0:
 			bet=0
 			self.makeOpeningBet(0)
 			return False
@@ -664,7 +664,7 @@ class BasicDoubleR7CountSitOutModified3(BasicDoubleR7CountSitOutModified2):
 	def betDecision(self,minB,maxB,table):
 		count=table.shoe.r7count
 		pen=table.shoe.getDealtRatio()
-		if count<10 or pen<0.1 or pen>0.5:
+		if count<0:
 			bet=0
 			self.makeOpeningBet(0)
 			return False
