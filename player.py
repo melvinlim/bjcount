@@ -327,3 +327,24 @@ class BasicDoubleR7Count(BasicDouble):
 			return True
 		else:
 			return False
+class BasicDoubleR7CountSitOut(BasicDoubleR7Count):
+	def __init__(self,pid,bankroll):
+		super(BasicDoubleR7CountSitOut,self).__init__(pid,bankroll)
+	def betDecision(self,minB,maxB,table):
+		count=table.shoe.r7count
+		if count<10:
+			bet=0
+			self.makeOpeningBet(0)
+			return False
+		if self.bankroll>=minB:
+			if count>20:
+				bet=maxB
+			elif count>15:
+				bet=minB+(maxB-minB)*0.5
+			else:
+				bet=minB
+			self.makeOpeningBet(bet)
+			return True
+		else:
+			self.makeOpeningBet(0)
+			return False
