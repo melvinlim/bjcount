@@ -37,8 +37,14 @@ class Dealer(Player):
 		for i in range(2):
 			for p in activePlayers:
 				self.dealCard(p.hands[0])
-		self.dealCard(self.hand)
+		visibleCard=self.dealCard(self.hand)
 		self.table.disp()
+		if visibleCard.value=='A':
+			for p in activePlayers:
+				p.decideOnInsurance()
+				if p.insuranceBet>p.hands[0].wager:
+					p.bankroll+=p.insuranceBet
+					p.insuranceBet=0
 		tbr=[]
 		for p in activePlayers:
 			x=self.handleDecisions(p)
@@ -50,6 +56,11 @@ class Dealer(Player):
 		self.disp()
 		self.handleDecisions(self)
 		winners,ties=self.evalAll(activePlayers)
+		if self.hand.isBlackjack:
+			for p in activePlayers:
+				if p.insuranceBet>0:
+					p.bankroll+=p.insuranceBet*2
+					p.insuranceBet=0
 		if winners==[]:
 			print 'no winners',
 		elif len(winners)==1:
@@ -66,6 +77,7 @@ class Dealer(Player):
 				print p.pid,
 			print
 		for p in activePlayers:
+			p.insuranceBet=0
 			p.discard()
 		self.discard()
 	def decide(self,table,first,hand):

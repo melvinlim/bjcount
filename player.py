@@ -2,12 +2,15 @@ import random
 from hand import *
 class Player(object):
 	def __init__(self,pid,bankroll):
+		self.insuranceBet=0
 		self.hands=[Hand(self)]
 		self.pid=pid
 		self.bankroll=bankroll
 		self.startingBankroll=bankroll
 		self.gamesPlayed=0
 		self.gamesWon=0
+	def decideOnInsurance(self):
+		return
 	def makeOpeningBet(self,amount):
 		assert amount<=self.bankroll
 		self.bankroll-=amount
@@ -53,7 +56,22 @@ class Stands(Player):
 class Human(Player):
 	def __init__(self,pid,bankroll):
 		super(Human,self).__init__(pid,bankroll)
-	def betDecision(self,minB,maxB):
+	def decideOnInsurance(self):
+		print 'Player '+str(self.pid)+':\t',
+		print 'insurance amount?\n',
+		print '[0]',
+		c=raw_input()
+		try:
+			n=int(c)
+			if n<=self.hands[0].wager/2:
+				self.bankroll-=n
+				self.insuranceBet=n
+				return True
+			else:
+				return False
+		except:
+			return False
+	def betDecision(self,minB,maxB,table):
 		print 'Player '+str(self.pid)+':\t',
 		print 'bet amount?\n',
 		print '['+str(minB)+']',
@@ -369,6 +387,9 @@ class BasicDoubleR7CountSitOutModified(BasicDouble):
 		else:
 			self.makeOpeningBet(0)
 			return False
+	def decideOnInsurance(self):
+		self.bankroll-=self.hands[0].wager/2
+		self.insuranceBet=self.hands[0].wager/2
 	def decide(self,table,first,hand):
 		dealerCard=table.dealer.hand.cards[0].bjv
 		if dealerCard==0:
