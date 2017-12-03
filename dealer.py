@@ -13,7 +13,8 @@ class Dealer(Player):
 		print self.hand.textString
 	def type1(self):
 		soft=self.hand.isSoft()
-		v=self.evalHand(self.hand)
+		self.hand.updateValue()
+		v=self.hand.trueValue
 		if v<17:
 			return 'hit'
 		elif v==17 and soft:
@@ -87,29 +88,21 @@ class Dealer(Player):
 			card=self.table.shoe.pop()
 		hand.add(card)
 		return card
-	def evalHand(self,hand):
-		if hand.isSoft():
-			v=hand.handValue+10
-		else:
-			v=hand.handValue
-		if v>21:
-			hand.isBusted=True
-		elif v==21 and len(hand.cards)==2:
-			hand.isBlackjack=True
-		return v
 	def makePayout(self,p,amount):
 		p.receiveChips(amount)
 	def evalAll(self,players):
 		wins=[]
 		ties=[]
-		dt=self.evalHand(self.hand)
+		self.hand.updateValue()
+		dt=self.hand.trueValue
 		for p in players:
 			if p.hasSurrendered:
 				self.makePayout(p,0.5*p.hands[0].wager)
 				p.hasSurrendered=False
 			else:
 				for h in p.hands:
-					t=self.evalHand(h)
+					h.updateValue()
+					t=h.trueValue
 					if self.hand.isBlackjack:
 							if h.isBlackjack:
 								ties.append(p)
@@ -140,7 +133,9 @@ class Dealer(Player):
 	def handleDecisions(self,p):
 		d=''
 		firstDecision=True
-		while self.evalHand(p.hands[0])<21:
+		p.hands[0].updateValue()
+		phv=p.hands[0].trueValue
+		while phv<21:
 			d=p.decide(self.table,firstDecision,p.hands[0])
 			if d=='stand':
 				return None
@@ -152,6 +147,8 @@ class Dealer(Player):
 				return None
 			elif d=='hit':
 				card=self.dealCard(p.hands[0])
+				p.hands[0].updateValue()
+				phv=p.hands[0].trueValue
 				p.disp()
 			elif d=='surrender':
 				if firstDecision==True:
@@ -159,6 +156,8 @@ class Dealer(Player):
 					return p
 				else:
 					card=self.dealCard(p.hands[0])
+					p.hands[0].updateValue()
+					phv=p.hands[0].trueValue
 					p.disp()
 			elif d=='split':
 				p.handsPlayed+=1
@@ -183,12 +182,16 @@ class Dealer(Player):
 		print 'split hand:\t',
 		print h.textString
 		firstDecision=False
-		while self.evalHand(h)<21:
+		h.updateValue()
+		phv=h.trueValue
+		while phv<21:
 			d=p.decide(self.table,firstDecision,h)
 			if d=='stand':
 				return result
 			elif d=='hit':
 				self.dealCard(h)
+				h.updateValue()
+				phv=h.trueValue
 				print 'split hand:\t',
 				print h.textString
 			elif d=='double':

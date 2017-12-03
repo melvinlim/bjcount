@@ -29,3 +29,13 @@ class Hand(object):
 			if len(self.cards)==2:
 				return True
 		return False
+	def updateValue(self):
+		if self.isSoft():
+			v=self.handValue+10
+		else:
+			v=self.handValue
+		if v>21:
+			self.isBusted=True
+		elif v==21 and len(self.cards)==2:
+			self.isBlackjack=True
+		self.trueValue=v
