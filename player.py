@@ -12,7 +12,7 @@ class Player(object):
 	def makeBet(self,amount):
 		assert amount<=self.bankroll
 		self.bankroll-=amount
-		self.hands[0].wager+=amount
+		self.openingWager=amount
 	def betDecision(self,minB,maxB):
 		if self.bankroll>=minB:
 			self.makeBet(minB)
@@ -142,7 +142,7 @@ class BasicNoDouble(Player):
 					return 'split'
 				else:
 					return 'hit'
-		elif self.hands[0].isSoft():
+		elif hand.isSoft():
 			if hand.handValue>8:
 				return 'stand'
 			elif hand.handValue==8:
@@ -232,7 +232,7 @@ class BasicDouble(Player):
 					return 'split'
 				else:
 					return 'hit'
-		elif self.hands[0].isSoft():
+		elif hand.isSoft():
 			if hand.handValue>9:
 				return 'stand'
 			elif hand.handValue==9:

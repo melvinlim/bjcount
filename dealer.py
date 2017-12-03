@@ -1,4 +1,4 @@
-from player import *	
+from player import *
 class Dealer(Player):
 	def __init__(self,pid,bankroll,table):
 		super(Dealer,self).__init__(pid,bankroll)
@@ -23,19 +23,20 @@ class Dealer(Player):
 	def step(self,players):
 		activePlayers=[]
 		for p in players:
-			for h in p.hands:
-				if h.wager>=self.table.minBet and h.wager<=self.table.maxBet:
-					activePlayers.append(p)
-				else:
-					p.bankroll+=h.wager
-					h.wager=0
+			if p.openingWager>=self.table.minBet and p.openingWager<=self.table.maxBet:
+				p.hands=[Hand(p)]
+				p.hands[0].wager=p.openingWager
+				p.openingWager=0
+				activePlayers.append(p)
+			else:
+				p.bankroll+=p.openingWager
+				p.openingWager=0
 		if len(activePlayers)==0:
 			print 'no players'
 			return
 		for i in range(2):
 			for p in activePlayers:
-				for h in p.hands:
-					self.dealCard(h)
+				self.dealCard(p.hands[0])
 		self.dealCard(self.hand)
 		self.table.disp()
 		tbr=[]
@@ -97,28 +98,28 @@ class Dealer(Player):
 				t=self.evalHand(h)
 				if self.hand.isBlackjack:
 						if h.isBlackjack:
-							ties.append(h.owner)
-							h.owner.payout(h.wager)
+							ties.append(p)
+							p.payout(h.wager)
 						else:
 							h.outcome='losingOutcome'
 				elif self.hand.isBusted:
 						if h.isBusted:
 							h.outcome='losingOutcome'
 						else:
-							wins.append(h.owner)
-							h.owner.win(h.wager)
+							wins.append(p)
+							p.win(h.wager)
 				else:
 					if h.isBlackjack:
-						wins.append(h.owner)
-						h.owner.win(h.wager*self.table.bjmultiplier)
+						wins.append(p)
+						p.win(h.wager*self.table.bjmultiplier)
 					elif h.isBusted:
 						h.outcome='losingOutcome'
 					elif t>dt:
-						wins.append(h.owner)
-						h.owner.win(h.wager)
+						wins.append(p)
+						p.win(h.wager)
 					elif t==dt:
-						ties.append(h.owner)
-						h.owner.payout(h.wager)
+						ties.append(p)
+						p.payout(h.wager)
 					else:
 						h.outcome='losingOutcome'
 		return wins,ties
@@ -130,7 +131,8 @@ class Dealer(Player):
 			if d=='stand':
 				return None
 			elif d=='double':
-				p.makeBet(p.hands[0].wager)
+				p.bankroll-=p.hands[0].wager
+				p.hands[0].wager+=p.hands[0].wager
 				card=self.dealCard(p.hands[0])
 				p.disp()
 				return None
@@ -157,20 +159,15 @@ class Dealer(Player):
 				h1.wager+=p.hands[0].wager
 				h2.wager+=p.hands[0].wager
 				p.bankroll-=p.hands[0].wager
-				p.hands=[h1,h2]
-				self.handleSplit(p)
+				p.hands=[]
+				p.hands+=self.handleSplitHand(h1,1)
+				p.hands+=self.handleSplitHand(h2,1)
 				return None
 			first=False
 		return None
-	def handleSplit(self,p):
-		tbr=[]
-		for h in p.hands:
-			x=self.handleSplitHand(p,h)
-			if x!=None:
-				tbr.append(x)
-		for h in tbr:
-			p.hands.remove(h)
-	def handleSplitHand(self,p,h):
+	def handleSplitHand(self,h,depth):
+		result=[h]
+		p=h.owner
 		print 'split hand:\t',
 		print h.textString
 		first=False
@@ -178,18 +175,20 @@ class Dealer(Player):
 		while self.evalHand(h)<21:
 			d=p.decide(self.table,first,h)
 			if d=='stand':
-				return None
+				return result
 			elif d=='hit':
 				self.dealCard(h)
 				print 'split hand:\t',
 				print h.textString
 			elif d=='double':
+				#import pdb
+				#pdb.set_trace()
 				self.dealCard(h)
 				p.bankroll-=h.wager
 				h.wager+=h.wager
 				print 'split hand:\t',
 				print h.textString
-				return None
+				return result
 			elif d=='split':
 				p.gamesPlayed+=1
 				h1=Hand(p)
@@ -201,9 +200,12 @@ class Dealer(Player):
 				h1.wager+=h.wager
 				h2.wager+=h.wager
 				p.bankroll-=h.wager
-				p.hands.append(h1)
-				p.hands.append(h2)
-				return h
+				result=[]
+				result+=self.handleSplitHand(h1,depth+1)
+				result+=self.handleSplitHand(h2,depth+1)
+				print depth
+				return result
 			else:
 				print 'cannot surrender split hand'
-				return None
+				return result
+		return result
