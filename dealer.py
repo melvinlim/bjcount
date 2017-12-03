@@ -45,13 +45,8 @@ class Dealer(Player):
 				if p.insuranceBet>p.hands[0].wager:
 					p.bankroll+=p.insuranceBet
 					p.insuranceBet=0
-		tbr=[]
 		for p in activePlayers:
-			x=self.handleDecisions(p)
-			tbr.append(x)
-		for p in tbr:
-			if p!=None:
-				activePlayers.remove(p)
+			self.handleDecisions(p)
 		self.dealCard(self.hand)
 		self.disp()
 		self.handleDecisions(self)
@@ -106,34 +101,38 @@ class Dealer(Player):
 		ties=[]
 		dt=self.evalHand(self.hand)
 		for p in players:
-			for h in p.hands:
-				t=self.evalHand(h)
-				if self.hand.isBlackjack:
+			if p.hasSurrendered:
+				p.payout(0.5*p.hands[0].wager)
+				p.hasSurrendered=False
+			else:
+				for h in p.hands:
+					t=self.evalHand(h)
+					if self.hand.isBlackjack:
+							if h.isBlackjack:
+								ties.append(p)
+								p.payout(h.wager)
+							else:
+								h.outcome='losingOutcome'
+					elif self.hand.isBusted:
+							if h.isBusted:
+								h.outcome='losingOutcome'
+							else:
+								wins.append(p)
+								p.win(h.wager)
+					else:
 						if h.isBlackjack:
+							wins.append(p)
+							p.win(h.wager*self.table.bjmultiplier)
+						elif h.isBusted:
+							h.outcome='losingOutcome'
+						elif t>dt:
+							wins.append(p)
+							p.win(h.wager)
+						elif t==dt:
 							ties.append(p)
 							p.payout(h.wager)
 						else:
 							h.outcome='losingOutcome'
-				elif self.hand.isBusted:
-						if h.isBusted:
-							h.outcome='losingOutcome'
-						else:
-							wins.append(p)
-							p.win(h.wager)
-				else:
-					if h.isBlackjack:
-						wins.append(p)
-						p.win(h.wager*self.table.bjmultiplier)
-					elif h.isBusted:
-						h.outcome='losingOutcome'
-					elif t>dt:
-						wins.append(p)
-						p.win(h.wager)
-					elif t==dt:
-						ties.append(p)
-						p.payout(h.wager)
-					else:
-						h.outcome='losingOutcome'
 		return wins,ties
 	def handleDecisions(self,p):
 		d=''
@@ -153,8 +152,7 @@ class Dealer(Player):
 				p.disp()
 			elif d=='surrender':
 				if first==True:
-					p.payout(0.5*p.hands[0].wager)
-					p.discard()
+					p.hasSurrendered=True
 					return p
 				else:
 					card=self.dealCard(p.hands[0])

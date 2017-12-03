@@ -2,6 +2,7 @@ import random
 from hand import *
 class Player(object):
 	def __init__(self,pid,bankroll):
+		self.hasSurrendered=False
 		self.insuranceBet=0
 		self.hands=[Hand(self)]
 		self.pid=pid
