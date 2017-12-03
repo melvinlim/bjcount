@@ -5,7 +5,7 @@ class Dealer(Player):
 		self.table=table
 		self.table.shoe.shuffle()
 		self.hand=self.hands[0]
-	def discard(self):
+	def discardHand(self):
 		self.hands=[Hand(self)]
 		self.hand=self.hands[0]
 	def disp(self):
@@ -59,8 +59,8 @@ class Dealer(Player):
 		self.printResults(winners,ties)
 		for p in activePlayers:
 			p.insuranceBet=0
-			p.discard()
-		self.discard()
+			p.discardHand()
+		self.discardHand()
 	def printResults(self,winners,ties):
 		if winners==[]:
 			print 'no winners',

@@ -22,7 +22,7 @@ class Player(object):
 			return True
 		else:
 			return False
-	def discard(self):
+	def discardHand(self):
 		self.hands=[Hand(self)]
 		self.gamesPlayed+=1
 	def win(self,amount):
