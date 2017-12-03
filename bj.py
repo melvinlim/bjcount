@@ -31,7 +31,7 @@ except:
 	humanPlayer=False
 bankroll=100000
 players=initPlayers(bankroll,humanPlayer)
-t=Table(players=players,nDecks=4,bankroll=bankroll,minBet=10,maxBet=30,bjmultiplier=1.5)
+t=Table(players=players,nDecks=8,bankroll=bankroll,minBet=10,maxBet=30,bjmultiplier=1.5)
 handsPlayed=0
 while True:
 	print 'hands played: '+str(handsPlayed)

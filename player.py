@@ -664,7 +664,7 @@ class BasicDoubleR7CountSitOutModified3(BasicDoubleR7CountSitOutModified2):
 	def betDecision(self,minB,maxB,table):
 		count=table.shoe.r7count
 		pen=table.shoe.getDealtRatio()
-		if count<10 or pen<0.70 or pen>0.85:
+		if count<10 or pen<0.25 or pen>0.5:
 			bet=0
 			self.makeOpeningBet(0)
 			return False
