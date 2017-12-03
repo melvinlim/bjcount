@@ -7,6 +7,8 @@ class Shoe(object):
 		self.refill()
 		random.seed(time.time())
 		self.resetCounts()
+	def getPenetration(self):
+		return self.cardsDealt*1.0/self.nCards
 	def updateCounts(self,card):
 		if card==None:
 			return
@@ -25,6 +27,7 @@ class Shoe(object):
 		self.r7count=(-2)*self.nDecks
 	def shuffle(self):
 		self.resetCounts()
+		self.cardsDealt=0
 		tmp=[]
 		for i in range(self.nCards-1,-1,-1):
 			t=random.randint(0,i)
@@ -38,6 +41,7 @@ class Shoe(object):
 		for card in self.decks:
 			card.disp()
 	def pop(self):
+		self.cardsDealt+=1
 		try:
 			card=self.decks.pop()
 		except:

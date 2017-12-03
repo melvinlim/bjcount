@@ -519,7 +519,7 @@ class BasicDoubleR7CountSitOutModified2(BasicDouble):
 		super(BasicDoubleR7CountSitOutModified2,self).__init__(pid,bankroll)
 	def betDecision(self,minB,maxB,table):
 		count=table.shoe.r7count
-		if count<10:
+		if count<10 or table.shoe.getPenetration()>0.75:
 			bet=0
 			self.makeOpeningBet(0)
 			return False
