@@ -34,14 +34,14 @@ class Player(object):
 		print self.hands[0].textString
 	def status(self):
 		if self.gamesPlayed==0:
-			winsOverGames=0
-			earningsPerGame=0
+			winPercent=0
+			profitPerGame=0
 		else:
-			winsOverGames=self.gamesWon*1.0/self.gamesPlayed
-			earningsPerGame=(self.bankroll-self.startingBankroll)*1.0/self.gamesPlayed
-		print 'Player '+str(self.pid)+':',
-		print '\twins/games: '+str(winsOverGames),
-		print '\tearnings/game: '+str(earningsPerGame)
+			winPercent=self.gamesWon*100.0/self.gamesPlayed
+			profitPerGame=(self.bankroll-self.startingBankroll)*1.0/self.gamesPlayed
+		print 'Player '+str(self.pid)+' ('+str(self.bankroll)+'):\t',
+		print 'win%: '+str(winPercent),
+		print '\tprofit/game: '+str(profitPerGame)
 	def decide(self,table,first,hand):
 		d=random.randint(0,1)
 		if d==0:
