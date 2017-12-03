@@ -76,7 +76,7 @@ class Dealer(Player):
 			for p in ties:
 				print p.pid,
 			print
-	def decide(self,table,first,hand):
+	def decide(self,table,firstDecision,hand):
 		return self.type1()
 	def dealCard(self,hand):
 		card=self.table.shoe.pop()
@@ -139,9 +139,9 @@ class Dealer(Player):
 		return wins,ties
 	def handleDecisions(self,p):
 		d=''
-		first=True
+		firstDecision=True
 		while self.evalHand(p.hands[0])<21:
-			d=p.decide(self.table,first,p.hands[0])
+			d=p.decide(self.table,firstDecision,p.hands[0])
 			if d=='stand':
 				return None
 			elif d=='double':
@@ -154,7 +154,7 @@ class Dealer(Player):
 				card=self.dealCard(p.hands[0])
 				p.disp()
 			elif d=='surrender':
-				if first==True:
+				if firstDecision==True:
 					p.hasSurrendered=True
 					return p
 				else:
@@ -175,17 +175,16 @@ class Dealer(Player):
 				p.hands+=self.handleSplitHand(h1,1)
 				p.hands+=self.handleSplitHand(h2,1)
 				return None
-			first=False
+			firstDecision=False
 		return None
 	def handleSplitHand(self,h,depth):
 		result=[h]
 		p=h.owner
 		print 'split hand:\t',
 		print h.textString
-		first=False
-		d=''
+		firstDecision=False
 		while self.evalHand(h)<21:
-			d=p.decide(self.table,first,h)
+			d=p.decide(self.table,firstDecision,h)
 			if d=='stand':
 				return result
 			elif d=='hit':
