@@ -9,6 +9,7 @@ def initPlayers(bankroll,humanPlayer=False):
 	players.append(BasicDoubleR7Count(len(players),bankroll))
 	players.append(BasicDoubleR7CountSitOut(len(players),bankroll))
 	players.append(BasicDoubleR7CountSitOutModified(len(players),bankroll))
+	players.append(BasicDoubleR7CountSitOutModified2(len(players),bankroll))
 	if humanPlayer==True:
 		players.append(Human(len(players),bankroll))
 	return players
