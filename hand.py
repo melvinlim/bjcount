@@ -19,6 +19,7 @@ class Hand(object):
 			self.handValue+=card.bjv
 		self.cards.append(card)
 		self.textString+=card.textString+' '
+		self.updateValue()
 	def isSoft(self):
 		if self.hasAce:
 			if (self.handValue+10)<=21:
