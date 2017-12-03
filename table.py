@@ -2,7 +2,8 @@ from shoe import *
 #from player import *
 from dealer import *
 class Table(object):
-	def __init__(self,players,nDecks,bankroll,minBet,maxBet,bjmultiplier):
+	def __init__(self,players,nDecks,bankroll,minBet,maxBet,bjmultiplier,dealtRatio):
+		self.dealtRatio=dealtRatio
 		self.bjmultiplier=bjmultiplier
 		self.shoe=Shoe(nDecks)
 		self.players=players
