@@ -40,7 +40,7 @@ class Dealer(Player):
 				self.dealCard(p.hands[0])
 		visibleCard=self.dealCard(self.hand)
 		self.table.disp()
-		if visibleCard.value=='A':
+		if visibleCard.face=='A':
 			for p in activePlayers:
 				p.decideOnInsurance()
 				if p.insuranceBet>p.hands[0].wager:

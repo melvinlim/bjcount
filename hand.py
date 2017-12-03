@@ -12,7 +12,7 @@ class Hand(object):
 		self.outcome=''
 		self.owner=owner
 	def add(self,card):
-		if card.bjv==0:
+		if card.face=='A':
 			self.hasAce=True
 			self.handValue+=1
 		else:

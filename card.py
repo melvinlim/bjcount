@@ -15,25 +15,25 @@ class Card(object):
 			assert False
 		if self.tmpVal==0:
 			self.bjv=10
-			value='K'
+			face='K'
 		elif self.tmpVal==1:
 			self.bjv=0
-			value='A'
+			face='A'
 		elif self.tmpVal==10:
 			self.bjv=10
-			value='T'
+			face='T'
 		elif self.tmpVal==11:
 			self.bjv=10
-			value='J'
+			face='J'
 		elif self.tmpVal==12:
 			self.bjv=10
-			value='Q'
+			face='Q'
 		else:
 			self.bjv=self.tmpVal
-			value=str(self.tmpVal)
+			face=str(self.tmpVal)
 		self.suit=suit
-		self.value=value
-		self.textString=self.value+self.suit
+		self.face=face
+		self.textString=self.face+self.suit
 	def disp(self):
 		print self.textString
-		#print self.value,self.suit,self.n
+		#print self.face,self.suit,self.n
