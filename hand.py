@@ -1,5 +1,5 @@
 class Hand(object):
-	def __init__(self):
+	def __init__(self,owner):
 		self.cards=[]
 		self.hasAce=False
 		self.wager=0
@@ -7,6 +7,10 @@ class Hand(object):
 		self.textString=''
 		self.handWon=False
 		self.handTied=False
+		self.isBlackjack=False
+		self.isBusted=False
+		self.outcome=''
+		self.owner=owner
 	def add(self,card):
 		if card.bjv==0:
 			self.hasAce=True

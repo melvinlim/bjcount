@@ -55,30 +55,11 @@ class Dealer(Player):
 			print 'winners: ',
 		s=''
 		for w in winners:
-			if w.blackjack==True:
-				w.win(w.hand.wager*self.table.bjmultiplier)
-			else:
-				w.win(w.hand.wager)
 			s+=str(w.pid)+' '
 		print s
-		for p in activePlayers:
-			if p.split:
-				p.splitWins=0
-				p.splitTies=0
-				for h in p.hands:
-					if h.handWon:
-						p.win(h.wager)
-						p.splitWins+=1
-					elif h.handTied:
-						p.payout(h.wager)
-						p.splitTies+=1
-				p.splitHands=len(p.hands)
-				print 'Player '+str(p.pid)+': w/t/h:'+str(p.splitWins)+'/'+str(p.splitTies)+'/'+str(p.splitHands)
-				p.split=False
 		if ties:
 			print 'tied: ',
 			for p in ties:
-				p.win(0)
 				print p.pid,
 			print
 		for p in activePlayers:
@@ -101,34 +82,54 @@ class Dealer(Player):
 		else:
 			v=hand.handValue
 		if v==21 and len(hand.cards)==2:
-			return 9999
+			hand.isBlackjack=True
+		if v>21:
+			hand.isBusted=True
 		return v
 	def evalAll(self,players):
-		winners=[]
+		wins=[]
 		ties=[]
-		dt=self.evalHand(self.hand)
-		if dt>21 and dt!=9999:
-			dt=0
+		htbe=[]
 		for p in players:
 			if p.split:
 				for h in p.hands:
-					t=self.evalHand(h)
-					if t>dt and t<=21:
-						h.handWon=True
-					elif t==dt:
-						h.handTied=True
+					htbe.append(h)
 			else:
-				p.blackjack=False
-				t=self.evalHand(p.hand)
-				if t>dt:
-					if t==9999:
-						p.blackjack=True
-						winners.append(p)
-					elif t<=21:
-						winners.append(p)
+				htbe.append(p.hand)
+		dt=self.evalHand(self.hand)
+		if self.hand.isBlackjack:
+			for h in htbe:
+				self.evalHand(h)
+				if h.isBlackjack:
+					ties.append(h.owner)
+					h.owner.payout(h.wager)
+				else:
+					h.outcome='losingOutcome'
+		elif self.hand.isBusted:
+			for h in htbe:
+				self.evalHand(h)
+				if h.isBusted:
+					h.outcome='losingOutcome'
+				else:
+					wins.append(h.owner)
+					h.owner.win(h.wager)
+		else:
+			for h in htbe:
+				t=self.evalHand(h)
+				if h.isBlackjack:
+					wins.append(h.owner)
+					h.owner.win(h.wager*self.table.bjmultiplier)
+				elif h.isBusted:
+					h.outcome='losingOutcome'
+				elif t>dt:
+					wins.append(h.owner)
+					h.owner.win(h.wager)
 				elif t==dt:
-					ties.append(p)
-		return winners,ties
+					ties.append(h.owner)
+					h.owner.payout(h.wager)
+				else:
+					h.outcome='losingOutcome'
+		return wins,ties
 	def handleDecisions(self,p):
 		d=''
 		first=True
@@ -155,8 +156,8 @@ class Dealer(Player):
 			elif d=='split':
 				p.gamesPlayed+=1
 				p.split=True
-				h1=Hand()
-				h2=Hand()
+				h1=Hand(p)
+				h2=Hand(p)
 				h1.add(p.hand.cards[0])
 				h2.add(p.hand.cards[1])
 				self.dealCard(h1)
@@ -164,7 +165,7 @@ class Dealer(Player):
 				h1.wager+=p.hand.wager
 				h2.wager+=p.hand.wager
 				p.bankroll-=p.hand.wager
-				p.hand=Hand()
+				p.hand=Hand(p)
 				p.hands=[h1,h2]
 				self.handleSplit(p)
 				return None
@@ -200,8 +201,8 @@ class Dealer(Player):
 				return None
 			elif d=='split':
 				p.gamesPlayed+=1
-				h1=Hand()
-				h2=Hand()
+				h1=Hand(p)
+				h2=Hand(p)
 				h1.add(h.cards[0])
 				h2.add(h.cards[1])
 				self.dealCard(h1)

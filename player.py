@@ -3,7 +3,7 @@ from hand import *
 class Player(object):
 	def __init__(self,pid,bankroll):
 		self.split=False
-		self.hand=Hand()
+		self.hand=Hand(self)
 		self.pid=pid
 		self.bankroll=bankroll
 		self.startingBankroll=bankroll
@@ -20,7 +20,7 @@ class Player(object):
 		else:
 			return False
 	def discard(self):
-		self.hand=Hand()
+		self.hand=Hand(self)
 		self.gamesPlayed+=1
 	def win(self,amount):
 		self.bankroll+=amount+self.hand.wager
