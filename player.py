@@ -25,10 +25,7 @@ class Player(object):
 	def discardHand(self):
 		self.hands=[Hand(self)]
 		self.handsPlayed+=1
-	def win(self,amount):
-		self.bankroll+=amount+self.hands[0].wager
-		self.handsWon+=1
-	def payout(self,amount):
+	def receiveChips(self,amount):
 		self.bankroll+=amount
 	def disp(self):
 		print 'Player '+str(self.pid)+' ('+str(self.bankroll)+'):\t',
