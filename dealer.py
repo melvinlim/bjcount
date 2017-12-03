@@ -12,15 +12,11 @@ class Dealer(Player):
 		print 'Dealer:\t\t',
 		print self.hand.textString
 	def type1(self):
-		aces=self.hand.hasAce
 		soft=self.hand.isSoft()
-		if soft:
-			v=self.hand.handValue+10
-		else:
-			v=self.hand.handValue
+		v=self.evalHand(self.hand)
 		if v<17:
 			return 'hit'
-		elif v==17 and aces==True and soft==True:
+		elif v==17 and soft:
 			return 'hit'
 		else:
 			return 'stand'
@@ -87,10 +83,10 @@ class Dealer(Player):
 			v=hand.handValue+10
 		else:
 			v=hand.handValue
-		if v==21 and len(hand.cards)==2:
-			hand.isBlackjack=True
 		if v>21:
 			hand.isBusted=True
+		elif v==21 and len(hand.cards)==2:
+			hand.isBlackjack=True
 		return v
 	def evalAll(self,players):
 		wins=[]
