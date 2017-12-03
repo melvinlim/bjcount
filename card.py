@@ -17,7 +17,7 @@ class Card(object):
 			self.bjv=10
 			face='K'
 		elif self.tmpVal==1:
-			self.bjv=0
+			self.bjv=11
 			face='A'
 		elif self.tmpVal==10:
 			self.bjv=10
