@@ -6,6 +6,7 @@ def initPlayers(bankroll,humanPlayer=False):
 	players.append(Stands(len(players),bankroll))
 	players.append(BasicNoDouble(len(players),bankroll))
 	players.append(BasicDouble(len(players),bankroll))
+	players.append(BasicDoubleR7Count(len(players),bankroll))
 	if humanPlayer==True:
 		players.append(Human(len(players),bankroll))
 	return players

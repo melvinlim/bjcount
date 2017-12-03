@@ -2,10 +2,20 @@ import random,time
 from card import *
 class Shoe(object):
 	def __init__(self,nDecks):
+		self.r7count=(-2)*nDecks
 		self.nDecks=nDecks
 		self.nCards=nDecks*52
 		self.refill()
 		random.seed(time.time())
+	def updateCounts(self,card):
+		if card==None:
+			return
+		elif card.textString=='7d' or card.textString=='7h':
+			self.r7count+=1
+		elif card.bjv<7:
+			self.r7count+=1
+		elif card.bjv>9:
+			self.r7count-=1
 	def refill(self):
 		self.decks=[]
 		for i in range(self.nDecks):
@@ -29,4 +39,5 @@ class Shoe(object):
 			card=self.decks.pop()
 		except:
 			card=None
+		self.updateCounts(card)
 		return card

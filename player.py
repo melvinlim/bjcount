@@ -12,7 +12,7 @@ class Player(object):
 		assert amount<=self.bankroll
 		self.bankroll-=amount
 		self.openingWager=amount
-	def betDecision(self,minB,maxB):
+	def betDecision(self,minB,maxB,table):
 		if self.bankroll>=minB:
 			self.makeOpeningBet(minB)
 			return True
@@ -311,3 +311,19 @@ class BasicDouble(Player):
 			else:
 				return 'stand'
 		return 'stand'
+class BasicDoubleR7Count(BasicDouble):
+	def __init__(self,pid,bankroll):
+		super(BasicDoubleR7Count,self).__init__(pid,bankroll)
+	def betDecision(self,minB,maxB,table):
+		count=table.shoe.r7count
+		if self.bankroll>=minB:
+			if count>5:
+				bet=minB+(maxB-minB)*0.5
+			elif count>10:
+				bet+maxB
+			else:
+				bet=minB
+			self.makeOpeningBet(bet)
+			return True
+		else:
+			return False

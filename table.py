@@ -13,7 +13,7 @@ class Table(object):
 	def round(self):
 		self.tableState='takingBets'
 		for p in self.players:
-			p.betDecision(self.minBet,self.maxBet)
+			p.betDecision(self.minBet,self.maxBet,self)
 		self.tableState='allowingDecisions'
 		self.dealer.step(self.players)
 	def disp(self):
