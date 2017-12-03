@@ -200,8 +200,9 @@ class BasicNoDouble(Player):
 				return 'stand'
 		return 'stand'
 class BasicDouble(Player):
-	def __init__(self,pid,bankroll):
+	def __init__(self,pid,bankroll,settings):
 		super(BasicDouble,self).__init__(pid,bankroll)
+		self.settings=settings
 	def decide(self,table,first,hand):
 		dealerCard=table.dealer.hand.cards[0].bjv
 		if dealerCard==0:
@@ -295,6 +296,9 @@ class BasicDouble(Player):
 				if dealerCard<10:
 					return 'double'
 				else:
+					if self.settings.modifiedStrategy:
+						if dealerCard==10:
+							return 'double'
 					return 'hit'
 			elif hand.handValue==11:
 				return 'double'
@@ -302,7 +306,10 @@ class BasicDouble(Player):
 				if dealerCard>6:
 					return 'hit'
 				elif dealerCard<4:
-					return 'hit'
+					if self.settings.modifiedStrategy:
+						return 'stand'
+					else:
+						return 'hit'
 				else:
 					return 'stand'
 			elif hand.handValue==13 or hand.handValue==14:
@@ -329,8 +336,7 @@ class BasicDouble(Player):
 		return 'stand'
 class BasicDoubleR7Count(BasicDouble):
 	def __init__(self,pid,bankroll,settings):
-		super(BasicDoubleR7Count,self).__init__(pid,bankroll)
-		self.settings=settings
+		super(BasicDoubleR7Count,self).__init__(pid,bankroll,settings)
 	def decideOnInsurance(self):
 		if self.settings.alwaysTakeInsurance:
 			self.bankroll-=self.hands[0].wager/2
@@ -356,322 +362,3 @@ class BasicDoubleR7Count(BasicDouble):
 		else:
 			self.makeOpeningBet(0)
 			return False
-class BasicDoubleR7CountSitOutModified(BasicDouble):
-	def __init__(self,pid,bankroll):
-		super(BasicDoubleR7CountSitOutModified,self).__init__(pid,bankroll)
-	def betDecision(self,minB,maxB,table):
-		count=table.shoe.r7count
-		if count<0:
-			bet=0
-			self.makeOpeningBet(0)
-			return False
-		if self.bankroll>=minB:
-			if count>20:
-				bet=maxB
-			elif count>15:
-				bet=minB+(maxB-minB)*0.5
-			else:
-				bet=minB
-			self.makeOpeningBet(bet)
-			return True
-		else:
-			self.makeOpeningBet(0)
-			return False
-	def decideOnInsurance(self):
-		self.bankroll-=self.hands[0].wager/2
-		self.insuranceBet=self.hands[0].wager/2
-	def decide(self,table,first,hand):
-		dealerCard=table.dealer.hand.cards[0].bjv
-		if dealerCard==0:
-			dealerCard=11
-		if hand.canSplit():
-			if hand.hasAce:
-				return 'split'
-			elif hand.handValue==20:
-				return 'stand'
-			elif hand.handValue==18:
-				if dealerCard<7:
-					return 'split'
-				elif dealerCard>9:
-					return 'stand'
-				elif dealerCard>7:
-					return 'split'
-				else:
-					return 'stand'
-			elif hand.handValue==16:
-				return 'split'
-			elif hand.handValue==14:
-				if dealerCard<8:
-					return 'split'
-				else:
-					return 'hit'
-			elif hand.handValue==12:
-				if dealerCard<7:
-					return 'split'
-				else:
-					return 'hit'
-			elif hand.handValue==10:
-				if dealerCard<10:
-					return 'double'
-				else:
-					return 'hit'
-			elif hand.handValue==8:
-				if dealerCard>6 or dealerCard<5:
-					return 'hit'
-				else:
-					return 'split'
-			else:
-				if dealerCard<8:
-					return 'split'
-				else:
-					return 'hit'
-		elif hand.isSoft():
-			if hand.handValue>9:
-				return 'stand'
-			elif hand.handValue==9:
-				if dealerCard==6:
-					return 'double'
-				else:
-					return 'stand'
-			elif hand.handValue==8:
-				if dealerCard>8:
-					return 'hit'
-				elif dealerCard>6:
-					return 'stand'
-				else:
-					return 'double'
-			elif hand.handValue==7:
-				if dealerCard>6:
-					return 'hit'
-				elif dealerCard<3:
-					return 'hit'
-				else:
-					return 'double'
-			elif hand.handValue>4:
-				if dealerCard>6:
-					return 'hit'
-				elif dealerCard<4:
-					return 'hit'
-				else:
-					return 'double'
-			else:
-				if dealerCard>6:
-					return 'hit'
-				elif dealerCard<5:
-					return 'hit'
-				else:
-					return 'double'
-		else:
-			if hand.handValue<9:
-				return 'hit'
-			elif hand.handValue==9:
-				if dealerCard>6 or dealerCard<3:
-					return 'hit'
-				else:
-					return 'double'
-			elif hand.handValue==10:
-				if dealerCard<11:
-					return 'double'
-				else:
-					return 'hit'
-			elif hand.handValue==11:
-				return 'double'
-			elif hand.handValue==12:
-				if dealerCard>6:
-					return 'hit'
-				else:
-					return 'stand'
-			elif hand.handValue==13 or hand.handValue==14:
-				if dealerCard>6:
-					return 'hit'
-				else:
-					return 'stand'
-			elif hand.handValue==15:
-				if dealerCard==10:
-					return 'surrender'
-				elif dealerCard>6:
-					return 'hit'
-				else:
-					return 'stand'
-			elif hand.handValue==16:
-				if dealerCard>8:
-					return 'surrender'
-				elif dealerCard>6:
-					return 'hit'
-				else:
-					return 'stand'
-			else:
-				return 'stand'
-		return 'stand'
-class BasicDoubleR7CountSitOutModified2(BasicDouble):
-	def __init__(self,pid,bankroll):
-		super(BasicDoubleR7CountSitOutModified2,self).__init__(pid,bankroll)
-	def betDecision(self,minB,maxB,table):
-		count=table.shoe.r7count
-		if count<0:
-			bet=0
-			self.makeOpeningBet(0)
-			return False
-		if self.bankroll>=minB:
-			if count>20:
-				bet=maxB
-			elif count>15:
-				bet=minB+(maxB-minB)*0.5
-			else:
-				bet=minB
-			self.makeOpeningBet(bet)
-			return True
-		else:
-			self.makeOpeningBet(0)
-			return False
-	def decideOnInsurance(self):
-		self.bankroll-=self.hands[0].wager/2
-		self.insuranceBet=self.hands[0].wager/2
-	def decide(self,table,first,hand):
-		dealerCard=table.dealer.hand.cards[0].bjv
-		if dealerCard==0:
-			dealerCard=11
-		if hand.canSplit():
-			if hand.hasAce:
-				return 'split'
-			elif hand.handValue==20:
-				return 'stand'
-			elif hand.handValue==18:
-				if dealerCard<7:
-					return 'split'
-				elif dealerCard>9:
-					return 'stand'
-				elif dealerCard>7:
-					return 'split'
-				else:
-					return 'stand'
-			elif hand.handValue==16:
-				return 'split'
-			elif hand.handValue==14:
-				if dealerCard<8:
-					return 'split'
-				else:
-					return 'hit'
-			elif hand.handValue==12:
-				if dealerCard<7:
-					return 'split'
-				else:
-					return 'hit'
-			elif hand.handValue==10:
-				if dealerCard<10:
-					return 'double'
-				else:
-					return 'hit'
-			elif hand.handValue==8:
-				if dealerCard>6 or dealerCard<5:
-					return 'hit'
-				else:
-					return 'split'
-			else:
-				if dealerCard<8:
-					return 'split'
-				else:
-					return 'hit'
-		elif hand.isSoft():
-			if hand.handValue>9:
-				return 'stand'
-			elif hand.handValue==9:
-				if dealerCard==6:
-					return 'double'
-				else:
-					return 'stand'
-			elif hand.handValue==8:
-				if dealerCard>8:
-					return 'hit'
-				elif dealerCard>6:
-					return 'stand'
-				else:
-					return 'double'
-			elif hand.handValue==7:
-				if dealerCard>6:
-					return 'hit'
-				elif dealerCard<3:
-					return 'hit'
-				else:
-					return 'double'
-			elif hand.handValue>4:
-				if dealerCard>6:
-					return 'hit'
-				elif dealerCard<4:
-					return 'hit'
-				else:
-					return 'double'
-			else:
-				if dealerCard>6:
-					return 'hit'
-				elif dealerCard<5:
-					return 'hit'
-				else:
-					return 'double'
-		else:
-			if hand.handValue<9:
-				return 'hit'
-			elif hand.handValue==9:
-				if dealerCard>6:
-					return 'hit'
-				else:
-					return 'double'
-			elif hand.handValue==10:
-				if dealerCard<11:
-					return 'double'
-				else:
-					return 'hit'
-			elif hand.handValue==11:
-				return 'double'
-			elif hand.handValue==12:
-				if dealerCard>6:
-					return 'hit'
-				else:
-					return 'stand'
-			elif hand.handValue==13 or hand.handValue==14:
-				if dealerCard>6:
-					return 'hit'
-				else:
-					return 'stand'
-			elif hand.handValue==15:
-				if dealerCard==10:
-					return 'surrender'
-				elif dealerCard>6:
-					return 'hit'
-				else:
-					return 'stand'
-			elif hand.handValue==16:
-				if dealerCard>8:
-					return 'surrender'
-				elif dealerCard>6:
-					return 'hit'
-				else:
-					return 'stand'
-			else:
-				return 'stand'
-		return 'stand'
-class BasicDoubleR7CountSitOutModified3(BasicDoubleR7CountSitOutModified2):
-	def __init__(self,pid,bankroll):
-		super(BasicDoubleR7CountSitOutModified3,self).__init__(pid,bankroll)
-	def betDecision(self,minB,maxB,table):
-		count=table.shoe.r7count
-		pen=table.shoe.getDealtRatio()
-		if count<0:
-			bet=0
-			self.makeOpeningBet(0)
-			return False
-		if self.bankroll>=minB:
-			if count>20:
-				bet=maxB
-			elif count>15:
-				bet=minB+(maxB-minB)*0.5
-			else:
-				bet=minB
-			self.makeOpeningBet(bet)
-			return True
-		else:
-			self.makeOpeningBet(0)
-			return False
-	def decideOnInsurance(self):
-		self.bankroll-=self.hands[0].wager/2
-		self.insuranceBet=self.hands[0].wager/2
