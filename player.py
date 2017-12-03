@@ -32,13 +32,13 @@ class Player(object):
 		print self.hands[0].textString
 	def status(self):
 		if self.handsPlayed==0:
-			winPercent=0
+			winRatio=0
 			profitPerGame=0
 		else:
-			winPercent=self.handsWon*100.0/self.handsPlayed
+			winRatio=self.handsWon*100.0/self.handsPlayed
 			profitPerGame=(self.bankroll-self.startingBankroll)*1.0/self.handsPlayed
 		print 'Player '+str(self.pid)+' ('+str(self.bankroll)+'):\t',
-		print 'win%: '+str(winPercent),
+		print 'win%: '+str(winRatio),
 		print '\tprofit/hand: '+str(profitPerGame)
 	def decide(self,table,first,hand):
 		d=random.randint(0,1)
@@ -516,7 +516,7 @@ class BasicDoubleR7CountSitOutModified2(BasicDouble):
 		super(BasicDoubleR7CountSitOutModified2,self).__init__(pid,bankroll)
 	def betDecision(self,minB,maxB,table):
 		count=table.shoe.r7count
-		if count<10 or table.shoe.getPenetration()>0.75:
+		if count<10 or table.shoe.getDealtRatio()>0.75:
 			bet=0
 			self.makeOpeningBet(0)
 			return False
@@ -658,3 +658,28 @@ class BasicDoubleR7CountSitOutModified2(BasicDouble):
 			else:
 				return 'stand'
 		return 'stand'
+class BasicDoubleR7CountSitOutModified3(BasicDoubleR7CountSitOutModified2):
+	def __init__(self,pid,bankroll):
+		super(BasicDoubleR7CountSitOutModified3,self).__init__(pid,bankroll)
+	def betDecision(self,minB,maxB,table):
+		count=table.shoe.r7count
+		pen=table.shoe.getDealtRatio()
+		if count<10 or pen<0.70 or pen>0.85:
+			bet=0
+			self.makeOpeningBet(0)
+			return False
+		if self.bankroll>=minB:
+			if count>20:
+				bet=maxB
+			elif count>15:
+				bet=minB+(maxB-minB)*0.5
+			else:
+				bet=minB
+			self.makeOpeningBet(bet)
+			return True
+		else:
+			self.makeOpeningBet(0)
+			return False
+	def decideOnInsurance(self):
+		self.bankroll-=self.hands[0].wager/2
+		self.insuranceBet=self.hands[0].wager/2

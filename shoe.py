@@ -7,7 +7,7 @@ class Shoe(object):
 		self.refill()
 		random.seed(time.time())
 		self.resetCounts()
-	def getPenetration(self):
+	def getDealtRatio(self):
 		return self.cardsDealt*1.0/self.nCards
 	def updateCounts(self,card):
 		if card==None:
