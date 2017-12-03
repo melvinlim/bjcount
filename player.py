@@ -327,7 +327,7 @@ class BasicDoubleR7Count(BasicDouble):
 			return True
 		else:
 			return False
-class BasicDoubleR7CountSitOut(BasicDoubleR7Count):
+class BasicDoubleR7CountSitOut(BasicDouble):
 	def __init__(self,pid,bankroll):
 		super(BasicDoubleR7CountSitOut,self).__init__(pid,bankroll)
 	def betDecision(self,minB,maxB,table):
@@ -348,3 +348,147 @@ class BasicDoubleR7CountSitOut(BasicDoubleR7Count):
 		else:
 			self.makeOpeningBet(0)
 			return False
+class BasicDoubleR7CountSitOutModified(BasicDouble):
+	def __init__(self,pid,bankroll):
+		super(BasicDoubleR7CountSitOutModified,self).__init__(pid,bankroll)
+	def betDecision(self,minB,maxB,table):
+		count=table.shoe.r7count
+		if count<10:
+			bet=0
+			self.makeOpeningBet(0)
+			return False
+		if self.bankroll>=minB:
+			if count>20:
+				bet=maxB
+			elif count>15:
+				bet=minB+(maxB-minB)*0.5
+			else:
+				bet=minB
+			self.makeOpeningBet(bet)
+			return True
+		else:
+			self.makeOpeningBet(0)
+			return False
+	def decide(self,table,first,hand):
+		dealerCard=table.dealer.hand.cards[0].bjv
+		if dealerCard==0:
+			dealerCard=11
+		if hand.canSplit():
+			if hand.hasAce:
+				return 'split'
+			elif hand.handValue==20:
+				return 'stand'
+			elif hand.handValue==18:
+				if dealerCard<7:
+					return 'split'
+				elif dealerCard>9:
+					return 'stand'
+				elif dealerCard>7:
+					return 'split'
+				else:
+					return 'stand'
+			elif hand.handValue==16:
+				return 'split'
+			elif hand.handValue==14:
+				if dealerCard<8:
+					return 'split'
+				else:
+					return 'hit'
+			elif hand.handValue==12:
+				if dealerCard<7:
+					return 'split'
+				else:
+					return 'hit'
+			elif hand.handValue==10:
+				if dealerCard<10:
+					return 'double'
+				else:
+					return 'hit'
+			elif hand.handValue==8:
+				if dealerCard>6 or dealerCard<5:
+					return 'hit'
+				else:
+					return 'split'
+			else:
+				if dealerCard<8:
+					return 'split'
+				else:
+					return 'hit'
+		elif hand.isSoft():
+			if hand.handValue>9:
+				return 'stand'
+			elif hand.handValue==9:
+				if dealerCard==6:
+					return 'double'
+				else:
+					return 'stand'
+			elif hand.handValue==8:
+				if dealerCard>8:
+					return 'hit'
+				elif dealerCard>6:
+					return 'stand'
+				else:
+					return 'double'
+			elif hand.handValue==7:
+				if dealerCard>6:
+					return 'hit'
+				elif dealerCard<3:
+					return 'hit'
+				else:
+					return 'double'
+			elif hand.handValue>4:
+				if dealerCard>6:
+					return 'hit'
+				elif dealerCard<4:
+					return 'hit'
+				else:
+					return 'double'
+			else:
+				if dealerCard>6:
+					return 'hit'
+				elif dealerCard<5:
+					return 'hit'
+				else:
+					return 'double'
+		else:
+			if hand.handValue<9:
+				return 'hit'
+			elif hand.handValue==9:
+				if dealerCard>6 or dealerCard<3:
+					return 'hit'
+				else:
+					return 'double'
+			elif hand.handValue==10:
+				if dealerCard<11:
+					return 'double'
+				else:
+					return 'hit'
+			elif hand.handValue==11:
+				return 'double'
+			elif hand.handValue==12:
+				if dealerCard>6:
+					return 'hit'
+				else:
+					return 'stand'
+			elif hand.handValue==13 or hand.handValue==14:
+				if dealerCard>6:
+					return 'hit'
+				else:
+					return 'stand'
+			elif hand.handValue==15:
+				if dealerCard==10:
+					return 'surrender'
+				elif dealerCard>6:
+					return 'hit'
+				else:
+					return 'stand'
+			elif hand.handValue==16:
+				if dealerCard>8:
+					return 'surrender'
+				elif dealerCard>6:
+					return 'hit'
+				else:
+					return 'stand'
+			else:
+				return 'stand'
+		return 'stand'
