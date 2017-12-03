@@ -149,7 +149,6 @@ class Dealer(Player):
 					p.disp()
 			elif d=='split':
 				p.gamesPlayed+=1
-				p.split=True
 				h1=Hand(p)
 				h2=Hand(p)
 				h1.add(p.hands[0].cards[0])
