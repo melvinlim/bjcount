@@ -56,25 +56,26 @@ class Dealer(Player):
 				if p.insuranceBet>0:
 					p.bankroll+=p.insuranceBet*2
 					p.insuranceBet=0
+		self.printResults(winners,ties)
+		for p in activePlayers:
+			p.insuranceBet=0
+			p.discard()
+		self.discard()
+	def printResults(self,winners,ties):
 		if winners==[]:
 			print 'no winners',
 		elif len(winners)==1:
 			print 'winner: ',
 		else:
 			print 'winners: ',
-		s=''
-		for w in winners:
-			s+=str(w.pid)+' '
-		print s
+		for p in winners:
+			print p.pid,
+		print
 		if ties:
 			print 'tied: ',
 			for p in ties:
 				print p.pid,
 			print
-		for p in activePlayers:
-			p.insuranceBet=0
-			p.discard()
-		self.discard()
 	def decide(self,table,first,hand):
 		return self.type1()
 	def dealCard(self,hand):
