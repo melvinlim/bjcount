@@ -9,13 +9,13 @@ class Player(object):
 		self.startingBankroll=bankroll
 		self.gamesPlayed=0
 		self.gamesWon=0
-	def makeBet(self,amount):
+	def makeOpeningBet(self,amount):
 		assert amount<=self.bankroll
 		self.bankroll-=amount
 		self.openingWager=amount
 	def betDecision(self,minB,maxB):
 		if self.bankroll>=minB:
-			self.makeBet(minB)
+			self.makeOpeningBet(minB)
 			return True
 		else:
 			return False
@@ -62,13 +62,13 @@ class Human(Player):
 		try:
 			n=int(c)
 			if self.bankroll>=n:
-				self.makeBet(n)
+				self.makeOpeningBet(n)
 				return True
 			else:
 				return False
 		except:
 			if self.bankroll>=minB:
-				self.makeBet(minB)
+				self.makeOpeningBet(minB)
 				return True
 			else:
 				return False
