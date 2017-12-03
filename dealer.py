@@ -4,6 +4,7 @@ class Dealer(Player):
 		super(Dealer,self).__init__(pid,bankroll)
 		self.table=table
 		self.table.shoe.shuffle()
+		self.hand=self.hands[0]
 	def disp(self):
 		print 'Dealer:\t\t',
 		print self.hand.textString
@@ -23,17 +24,19 @@ class Dealer(Player):
 	def step(self,players):
 		activePlayers=[]
 		for p in players:
-			if p.hand.wager>=self.table.minBet and p.hand.wager<=self.table.maxBet:
-				activePlayers.append(p)
-			else:
-				p.bankroll+=p.hand.wager
-				p.hand.wager=0
+			for h in p.hands:
+				if h.wager>=self.table.minBet and h.wager<=self.table.maxBet:
+					activePlayers.append(p)
+				else:
+					p.bankroll+=h.wager
+					h.wager=0
 		if len(activePlayers)==0:
 			print 'no players'
 			return
 		for i in range(2):
 			for p in activePlayers:
-				self.dealCard(p.hand)
+				for h in p.hands:
+					self.dealCard(h)
 		self.dealCard(self.hand)
 		self.table.disp()
 		tbr=[]
@@ -95,7 +98,7 @@ class Dealer(Player):
 				for h in p.hands:
 					htbe.append(h)
 			else:
-				htbe.append(p.hand)
+				htbe.append(p.hands[0])
 		dt=self.evalHand(self.hand)
 		if self.hand.isBlackjack:
 			for h in htbe:
@@ -133,39 +136,38 @@ class Dealer(Player):
 	def handleDecisions(self,p):
 		d=''
 		first=True
-		while self.evalHand(p.hand)<21:
-			d=p.decide(self.table,first,p.hand)
+		while self.evalHand(p.hands[0])<21:
+			d=p.decide(self.table,first,p.hands[0])
 			if d=='stand':
 				return None
 			elif d=='double':
-				p.makeBet(p.hand.wager)
-				card=self.dealCard(p.hand)
+				p.makeBet(p.hands[0].wager)
+				card=self.dealCard(p.hands[0])
 				p.disp()
 				return None
 			elif d=='hit':
-				card=self.dealCard(p.hand)
+				card=self.dealCard(p.hands[0])
 				p.disp()
 			elif d=='surrender':
 				if first==True:
-					p.payout(0.5*p.hand.wager)
+					p.payout(0.5*p.hands[0].wager)
 					p.discard()
 					return p
 				else:
-					card=self.dealCard(p.hand)
+					card=self.dealCard(p.hands[0])
 					p.disp()
 			elif d=='split':
 				p.gamesPlayed+=1
 				p.split=True
 				h1=Hand(p)
 				h2=Hand(p)
-				h1.add(p.hand.cards[0])
-				h2.add(p.hand.cards[1])
+				h1.add(p.hands[0].cards[0])
+				h2.add(p.hands[0].cards[1])
 				self.dealCard(h1)
 				self.dealCard(h2)
-				h1.wager+=p.hand.wager
-				h2.wager+=p.hand.wager
-				p.bankroll-=p.hand.wager
-				p.hand=Hand(p)
+				h1.wager+=p.hands[0].wager
+				h2.wager+=p.hands[0].wager
+				p.bankroll-=p.hands[0].wager
 				p.hands=[h1,h2]
 				self.handleSplit(p)
 				return None

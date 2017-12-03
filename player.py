@@ -3,7 +3,7 @@ from hand import *
 class Player(object):
 	def __init__(self,pid,bankroll):
 		self.split=False
-		self.hand=Hand(self)
+		self.hands=[Hand(self)]
 		self.pid=pid
 		self.bankroll=bankroll
 		self.startingBankroll=bankroll
@@ -12,7 +12,7 @@ class Player(object):
 	def makeBet(self,amount):
 		assert amount<=self.bankroll
 		self.bankroll-=amount
-		self.hand.wager+=amount
+		self.hands[0].wager+=amount
 	def betDecision(self,minB,maxB):
 		if self.bankroll>=minB:
 			self.makeBet(minB)
@@ -20,16 +20,17 @@ class Player(object):
 		else:
 			return False
 	def discard(self):
-		self.hand=Hand(self)
+		self.hands=[Hand(self)]
+		self.hand=self.hands[0]
 		self.gamesPlayed+=1
 	def win(self,amount):
-		self.bankroll+=amount+self.hand.wager
+		self.bankroll+=amount+self.hands[0].wager
 		self.gamesWon+=1
 	def payout(self,amount):
 		self.bankroll+=amount
 	def disp(self):
 		print 'Player '+str(self.pid)+' ('+str(self.bankroll)+'):\t',
-		print self.hand.textString
+		print self.hands[0].textString
 	def status(self):
 		if self.gamesPlayed==0:
 			winsOverGames=0
@@ -142,7 +143,7 @@ class BasicNoDouble(Player):
 					return 'split'
 				else:
 					return 'hit'
-		elif self.hand.isSoft():
+		elif self.hands[0].isSoft():
 			if hand.handValue>8:
 				return 'stand'
 			elif hand.handValue==8:
@@ -232,7 +233,7 @@ class BasicDouble(Player):
 					return 'split'
 				else:
 					return 'hit'
-		elif self.hand.isSoft():
+		elif self.hands[0].isSoft():
 			if hand.handValue>9:
 				return 'stand'
 			elif hand.handValue==9:
