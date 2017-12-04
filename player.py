@@ -2,6 +2,8 @@ import random
 from hand import *
 class Player(object):
 	def __init__(self,pid,bankroll):
+		self.maxBankroll=bankroll
+		self.maxlft=0
 		self.isSittingOut=False
 		self.hasSurrendered=False
 		self.insuranceBet=0
@@ -11,6 +13,10 @@ class Player(object):
 		self.startingBankroll=bankroll
 		self.handsPlayed=0
 		self.handsWon=0
+	def updateStats(self):
+		lft=self.maxBankroll-self.bankroll
+		if lft>self.maxlft:
+			self.maxlft=lft
 	def decideOnInsurance(self):
 		return
 	def makeOpeningBet(self,amount):
@@ -38,10 +44,11 @@ class Player(object):
 		else:
 			winPct=self.handsWon*100.0/self.handsPlayed
 			profitPerHand=(self.bankroll-self.startingBankroll)*1.0/self.handsPlayed
-		print 'Player '+str(self.pid)+' ('+str(self.bankroll)+'):\t',
-		print 'winPct: %.2f'%(winPct),
+		print 'Player '+str(self.pid)+' ('+str(self.bankroll)+'):',
+#		print '\twinPct: %.2f'%(winPct),
 		print '\tprofit/hand: %.2f'%(profitPerHand),
-		print '\thands: %d'%(self.handsPlayed)
+		print '\thands: %d'%(self.handsPlayed),
+		print '\tmaxlft: %d'%(self.maxlft)
 	def decide(self,table,first,hand):
 		d=random.randint(0,1)
 		if d==0:

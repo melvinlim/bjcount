@@ -64,7 +64,8 @@ class Dealer(Player):
 					p.bankroll+=p.insuranceBet*2
 					p.insuranceBet=0
 		self.printResults(winningHands,tiedHands)
-		for p in activePlayers:
+		for p in players:
+			p.updateStats()
 			p.insuranceBet=0
 			p.discardHand()
 		self.discardHand()
