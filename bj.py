@@ -16,9 +16,11 @@ def initPlayers(bankroll,humanPlayer=False):
 		players.append(Human(len(players),bankroll))
 	return players
 humanPlayer=False
+NDECKS=8
 print 'mcSim?\t[n]',
 x=raw_input()
 if x=='y':
+	NDECKS=1
 	doMC=True
 else:
 	doMC=False
@@ -39,10 +41,10 @@ else:
 		humanPlayer=False
 bankroll=100000
 players=initPlayers(bankroll,humanPlayer)
-t=Table(players=players,nDecks=8,bankroll=bankroll,minBet=10,maxBet=20,bjmultiplier=1.5,dealtRatio=0.4)
+t=Table(players=players,nDecks=NDECKS,bankroll=bankroll,minBet=10,maxBet=20,bjmultiplier=1.5,dealtRatio=0.4)
 handsPlayed=0
 if doMC:
-	t.mcSim(8,7,1)	#test player 8,7 versus dealer A
+#	t.mcSim(8,7,1)	#test player 8,7 versus dealer A
 	t.mcSim(8,7,7)
 else:
 	while True:

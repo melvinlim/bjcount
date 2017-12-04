@@ -39,9 +39,7 @@ class Table(object):
 		quiet=True
 		handsPerStep=1000
 		hands=0
-		value={}
-		for d in ['stand','hit']:
-			value[d]=0
+		value=self.initValue()
 		while True:
 			for i in range(handsPerStep):
 				p,d=self.setUp(p1,p2,d1)
@@ -68,8 +66,34 @@ class Table(object):
 				hands+=1
 			for d in value:
 				print d+':\t'+str(value[d]*1.0/hands)
+			print p1,p2,d1
 			print 'simulated %d hands'%hands
-			raw_input()
+			print 'continue? (c to change problem)\t[y]',
+			x=raw_input()
+			if x=='c':
+				print 'p1:\t',
+				p1=self.assignInput(p1)
+				print 'p2:\t',
+				p2=self.assignInput(p2)
+				print 'd1:\t',
+				d1=self.assignInput(d1)
+				print 'new problem: [%d,%d,%d]'%(p1,p2,d1)
+				hands=0
+				value=self.initValue()
+			elif x=='n':
+				break
+	def initValue(self):
+		value={}
+		for d in ['stand','hit']:
+			value[d]=0
+		return value
+	def assignInput(self,original):
+		x=raw_input()
+		try:
+			tmp=int(x)
+		except:
+			tmp=original
+		return tmp
 	def status(self):
 		for p in self.players:
 			p.status()
