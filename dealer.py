@@ -145,7 +145,7 @@ class Dealer(Player):
 						else:
 							h.outcome='losingOutcome'
 		return wins,ties
-	def handleDecisions(self,p):
+	def handleDecisions(self,p,quiet=False):
 		hasHit=False
 		firstDecision=True
 		p.hands[0].updateValue()
@@ -161,14 +161,16 @@ class Dealer(Player):
 				p.bankroll-=p.hands[0].wager
 				p.hands[0].wager+=p.hands[0].wager
 				card=self.dealCard(p.hands[0])
-				p.disp()
+				if not quiet:
+					p.disp()
 				return None
 			elif d=='hit':
 				hasHit=True
 				card=self.dealCard(p.hands[0])
 				p.hands[0].updateValue()
 				phv=p.hands[0].trueValue
-				p.disp()
+				if not quiet:
+					p.disp()
 			elif d=='surrender':
 				if firstDecision==True:
 					p.hasSurrendered=True
@@ -177,7 +179,8 @@ class Dealer(Player):
 					card=self.dealCard(p.hands[0])
 					p.hands[0].updateValue()
 					phv=p.hands[0].trueValue
-					p.disp()
+					if not quiet:
+						p.disp()
 			elif d=='split':
 				p.handsPlayed+=1
 				h1=Hand(p)
