@@ -57,30 +57,30 @@ class Dealer(Player):
 		self.dealCard(self.hand)
 		self.disp()
 		self.handleDecisions(self)
-		winners,ties=self.evalAll(activePlayers)
+		winningHands,tiedHands=self.evalAll(activePlayers)
 		if self.hand.isBlackjack:
 			for p in activePlayers:
 				if p.insuranceBet>0:
 					p.bankroll+=p.insuranceBet*2
 					p.insuranceBet=0
-		self.printResults(winners,ties)
+		self.printResults(winningHands,tiedHands)
 		for p in activePlayers:
 			p.insuranceBet=0
 			p.discardHand()
 		self.discardHand()
-	def printResults(self,winners,ties):
-		if winners==[]:
-			print 'no winners',
-		elif len(winners)==1:
-			print 'winner: ',
+	def printResults(self,winningHands,tiedHands):
+		if winningHands==[]:
+			print 'no winning hands',
+		elif len(winningHands)==1:
+			print 'winning hand: ',
 		else:
-			print 'winners: ',
-		for p in winners:
+			print 'winning hands: ',
+		for p in winningHands:
 			print p.pid,
 		print
-		if ties:
-			print 'tied: ',
-			for p in ties:
+		if tiedHands:
+			print 'tied hands: ',
+			for p in tiedHands:
 				print p.pid,
 			print
 	def decide(self,table,firstDecision,hand):
