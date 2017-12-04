@@ -32,10 +32,10 @@ except:
 	humanPlayer=False
 bankroll=100000
 players=initPlayers(bankroll,humanPlayer)
-t=Table(players=players,nDecks=8,bankroll=bankroll,minBet=10,maxBet=20,bjmultiplier=1.5,dealtRatio=0.5)
+t=Table(players=players,nDecks=8,bankroll=bankroll,minBet=10,maxBet=20,bjmultiplier=1.5,dealtRatio=0.4)
 handsPlayed=0
 while True:
-	print 'hands played: '+str(handsPlayed)
+	print 'rounds dealt: '+str(handsPlayed)
 	if handsPlayed%updateInterval==0:
 		print 'continue? (y/n)\t',
 		state=raw_input()

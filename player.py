@@ -40,7 +40,8 @@ class Player(object):
 			profitPerHand=(self.bankroll-self.startingBankroll)*1.0/self.handsPlayed
 		print 'Player '+str(self.pid)+' ('+str(self.bankroll)+'):\t',
 		print 'winPct: %.2f'%(winPct),
-		print '\tprofit/hand: %.2f'%(profitPerHand)
+		print '\tprofit/hand: %.2f'%(profitPerHand),
+		print '\thands: %d'%(self.handsPlayed)
 	def decide(self,table,first,hand):
 		d=random.randint(0,1)
 		if d==0:
