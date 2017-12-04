@@ -26,9 +26,11 @@ class Dealer(Player):
 		if self.table.shoe.getDealtRatio()>self.table.dealtRatio:
 			self.table.shoe.refill()
 			self.table.shoe.shuffle()
+			for p in players:
+				p.isSittingOut=False
 		activePlayers=[]
 		for p in players:
-			if p.openingWager>=self.table.minBet and p.openingWager<=self.table.maxBet:
+			if p.isSittingOut==False and p.openingWager>=self.table.minBet and p.openingWager<=self.table.maxBet:
 				p.hands=[Hand(p)]
 				p.hands[0].wager=p.openingWager
 				p.openingWager=0
@@ -89,6 +91,8 @@ class Dealer(Player):
 			print 'out of cards.  reshuffling.'
 			self.table.shoe.refill()
 			self.table.shoe.shuffle()
+			for p in players:
+				p.isSittingOut=False
 			card=self.table.shoe.pop()
 		hand.add(card)
 		return card

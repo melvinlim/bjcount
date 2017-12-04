@@ -2,6 +2,7 @@ import random
 from hand import *
 class Player(object):
 	def __init__(self,pid,bankroll):
+		self.isSittingOut=False
 		self.hasSurrendered=False
 		self.insuranceBet=0
 		self.hands=[Hand(self)]
@@ -346,7 +347,8 @@ class BasicDoubleR7Count(BasicDouble):
 	def betDecision(self,minB,maxB,table):
 		count=table.shoe.r7count
 		if self.settings.canSitOut:
-			if count<0:
+			if count<-10:
+				self.isSittingOut=True
 				bet=0
 				self.makeOpeningBet(0)
 				return False
