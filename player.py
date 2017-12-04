@@ -193,14 +193,20 @@ class BasicNoDouble(Player):
 					return 'stand'
 			elif hand.handValue==15:
 				if dealerCard==10:
-					return 'surrender'
+					if self.settings.allowSurrender:
+						return 'surrender'
+					else:
+						return 'hit'
 				elif dealerCard>6:
 					return 'hit'
 				else:
 					return 'stand'
 			elif hand.handValue==16:
 				if dealerCard>8:
-					return 'surrender'
+					if self.settings.allowSurrender:
+						return 'surrender'
+					else:
+						return 'hit'
 				elif dealerCard>6:
 					return 'hit'
 				else:
@@ -334,14 +340,20 @@ class BasicDouble(Player):
 					return 'stand'
 			elif hand.handValue==15:
 				if dealerCard==10:
-					return 'surrender'
+					if self.settings.allowSurrender:
+						return 'surrender'
+					else:
+						return 'hit'
 				elif dealerCard>6:
 					return 'hit'
 				else:
 					return 'stand'
 			elif hand.handValue==16:
 				if dealerCard>8:
-					return 'surrender'
+					if self.settings.allowSurrender:
+						return 'surrender'
+					else:
+						return 'hit'
 				elif dealerCard>6:
 					return 'hit'
 				else:
