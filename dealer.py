@@ -231,7 +231,6 @@ class Dealer(Player):
 				result=[]
 				result+=self.handleSplitHand(h1,depth+1)
 				result+=self.handleSplitHand(h2,depth+1)
-				print depth
 				return result
 			else:
 				print 'cannot surrender split hand'
