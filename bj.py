@@ -20,7 +20,7 @@ NDECKS=8
 print 'mcSim?\t[n]',
 x=raw_input()
 if x=='y':
-	NDECKS=1
+	NDECKS=8
 	doMC=True
 else:
 	doMC=False
