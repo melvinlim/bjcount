@@ -109,6 +109,7 @@ class Dealer(Player):
 		for p in players:
 			if p.hasSurrendered:
 				self.returnChips(p,0.5*p.hands[0].wager)
+				p.discardHand()
 				p.hasSurrendered=False
 			else:
 				for h in p.hands:
