@@ -290,6 +290,9 @@ class BasicDouble(Player):
 				return 'hit'
 			elif hand.handValue==9:
 				if dealerCard>6 or dealerCard<3:
+					if self.settings.simplifiedStrategy:
+						if dealerCard==2:
+							return 'double'
 					return 'hit'
 				else:
 					return 'double'
