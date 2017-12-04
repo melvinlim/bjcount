@@ -238,6 +238,9 @@ class BasicDouble(Player):
 				if dealerCard<10:
 					return 'double'
 				else:
+					if self.settings.modifiedStrategy:
+						if dealerCard==10:
+							return 'double'
 					return 'hit'
 			elif hand.handValue==8:
 				if dealerCard>6 or dealerCard<5:
