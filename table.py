@@ -1,5 +1,4 @@
 from shoe import *
-#from player import *
 from dealer import *
 class Table(object):
 	def __init__(self,players,nDecks,bankroll,minBet,maxBet,bjmultiplier,dealtRatio):
