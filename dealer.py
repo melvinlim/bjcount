@@ -146,13 +146,17 @@ class Dealer(Player):
 							h.outcome='losingOutcome'
 		return wins,ties
 	def handleDecisions(self,p):
+		hasHit=False
 		firstDecision=True
 		p.hands[0].updateValue()
 		phv=p.hands[0].trueValue
 		while phv<21:
 			d=p.decide(self.table,firstDecision,p.hands[0])
 			if d=='stand':
-				return None
+				if hasHit:
+					return 'hit'
+				else:
+					return 'stand'
 			elif d=='double':
 				p.bankroll-=p.hands[0].wager
 				p.hands[0].wager+=p.hands[0].wager
@@ -160,6 +164,7 @@ class Dealer(Player):
 				p.disp()
 				return None
 			elif d=='hit':
+				hasHit=True
 				card=self.dealCard(p.hands[0])
 				p.hands[0].updateValue()
 				phv=p.hands[0].trueValue
@@ -189,7 +194,7 @@ class Dealer(Player):
 				p.hands+=self.handleSplitHand(h2,1)
 				return None
 			firstDecision=False
-		return None
+		return 'hit'
 	def handleSplitHand(self,h,depth):
 		result=[h]
 		p=h.owner

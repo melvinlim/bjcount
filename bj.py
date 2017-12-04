@@ -15,34 +15,44 @@ def initPlayers(bankroll,humanPlayer=False):
 	if humanPlayer==True:
 		players.append(Human(len(players),bankroll))
 	return players
-print 'update interval?\n[1000]',
+humanPlayer=False
+print 'mcSim?\t[n]',
 x=raw_input()
-try:
-	updateInterval=int(x)
-except:
-	updateInterval=1000
-print 'human player?\n[n]',
-x=raw_input()
-try:
-	if x=='y':
-		humanPlayer=True
-	else:
+if x=='y':
+	doMC=True
+else:
+	doMC=False
+	print 'update interval?\n[1000]',
+	x=raw_input()
+	try:
+		updateInterval=int(x)
+	except:
+		updateInterval=1000
+	print 'human player?\n[n]',
+	x=raw_input()
+	try:
+		if x=='y':
+			humanPlayer=True
+		else:
+			humanPlayer=False
+	except:
 		humanPlayer=False
-except:
-	humanPlayer=False
 bankroll=100000
 players=initPlayers(bankroll,humanPlayer)
 t=Table(players=players,nDecks=8,bankroll=bankroll,minBet=10,maxBet=20,bjmultiplier=1.5,dealtRatio=0.4)
 handsPlayed=0
-while True:
-	print 'rounds dealt: '+str(handsPlayed)
-	if handsPlayed%updateInterval==0:
-		print 'continue? (y/n)\t',
-		state=raw_input()
-		if state=='':
-			pass
-		elif state=='n':
-			break
-	t.round()
-	t.status()
-	handsPlayed+=1
+if doMC:
+	t.mcSim(8,7,1)
+else:
+	while True:
+		print 'rounds dealt: '+str(handsPlayed)
+		if handsPlayed%updateInterval==0:
+			print 'continue? (y/n)\t',
+			state=raw_input()
+			if state=='':
+				pass
+			elif state=='n':
+				break
+		t.round()
+		t.status()
+		handsPlayed+=1
