@@ -57,7 +57,10 @@ class Table(object):
 				if not quiet:
 					print winningHands,tiedHands
 				if winningHands!=[]:
-					value[decision]+=1
+					if p.hands[0].isBlackjack:
+						value[decision]+=1.5
+					else:
+						value[decision]+=1
 				elif tiedHands!=[]:
 					value[decision]+=0
 				else:
