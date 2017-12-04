@@ -66,6 +66,8 @@ class Dealer(Player):
 		self.printResults(winningHands,tiedHands)
 		for p in players:
 			p.updateStats()
+			p.hands=[Hand(self)]
+		for p in activePlayers:
 			p.insuranceBet=0
 			p.discardHand()
 		self.discardHand()
