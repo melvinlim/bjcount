@@ -17,7 +17,7 @@ class Player(object):
 		lft=self.maxBankroll-self.bankroll
 		if lft>self.maxlft:
 			self.maxlft=lft
-	def decideOnInsurance(self):
+	def decideOnInsurance(self,table):
 		return
 	def makeOpeningBet(self,amount):
 		assert amount<=self.bankroll
@@ -63,7 +63,7 @@ class Stands(Player):
 class Human(Player):
 	def __init__(self,pid,bankroll):
 		super(Human,self).__init__(pid,bankroll)
-	def decideOnInsurance(self):
+	def decideOnInsurance(self,table):
 		print 'Player '+str(self.pid)+':\t',
 		print 'insurance amount?\n',
 		print '[0]',
@@ -352,8 +352,8 @@ class BasicDouble(Player):
 class BasicDoubleR7Count(BasicDouble):
 	def __init__(self,pid,bankroll,settings):
 		super(BasicDoubleR7Count,self).__init__(pid,bankroll,settings)
-	def decideOnInsurance(self):
-		if self.settings.alwaysTakeInsurance:
+	def decideOnInsurance(self,table):
+		if self.settings.alwaysTakeInsurance and table.shoe.r7count>=2:
 			self.bankroll-=self.hands[0].wager/2
 			self.insuranceBet=self.hands[0].wager/2
 		else:
