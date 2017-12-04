@@ -254,7 +254,8 @@ class BasicDouble(Player):
 				else:
 					if self.settings.modifiedStrategy:
 						if dealerCard==10:
-							return 'double'
+							if table.shoe.r7count>=2:
+								return 'double'
 					return 'hit'
 			elif hand.handValue==8:
 				if dealerCard>6 or dealerCard<5:
@@ -319,7 +320,8 @@ class BasicDouble(Player):
 				else:
 					if self.settings.modifiedStrategy:
 						if dealerCard==10:
-							return 'double'
+							if table.shoe.r7count>=2:
+								return 'double'
 					return 'hit'
 			elif hand.handValue==11:
 				return 'double'
