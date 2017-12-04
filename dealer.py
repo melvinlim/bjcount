@@ -97,6 +97,9 @@ class Dealer(Player):
 		hand.add(card)
 		return card
 	def makePayout(self,p,amount):
+		p.handsWon+=1
+		p.receiveChips(amount)
+	def returnChips(self,p,amount):
 		p.receiveChips(amount)
 	def evalAll(self,players):
 		wins=[]
@@ -105,7 +108,7 @@ class Dealer(Player):
 		dt=self.hand.trueValue
 		for p in players:
 			if p.hasSurrendered:
-				self.makePayout(p,0.5*p.hands[0].wager)
+				self.returnChips(p,0.5*p.hands[0].wager)
 				p.hasSurrendered=False
 			else:
 				for h in p.hands:
@@ -114,7 +117,7 @@ class Dealer(Player):
 					if self.hand.isBlackjack:
 							if h.isBlackjack:
 								ties.append(p)
-								self.makePayout(p,h.wager)
+								self.returnChips(p,h.wager)
 							else:
 								h.outcome='losingOutcome'
 					elif self.hand.isBusted:
@@ -134,7 +137,7 @@ class Dealer(Player):
 							self.makePayout(p,h.wager*2)
 						elif t==dt:
 							ties.append(p)
-							self.makePayout(p,h.wager)
+							self.returnChips(p,h.wager)
 						else:
 							h.outcome='losingOutcome'
 		return wins,ties
