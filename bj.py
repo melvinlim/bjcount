@@ -16,6 +16,7 @@ def initPlayers(bankroll,humanPlayer=False):
 		players.append(Human(len(players),bankroll))
 	return players
 humanPlayer=False
+updateInterval=1
 NDECKS=8
 print 'mcSim?\t[n]',
 x=raw_input()
@@ -24,12 +25,6 @@ if x=='y':
 	doMC=True
 else:
 	doMC=False
-	print 'update interval?\n[1000]',
-	x=raw_input()
-	try:
-		updateInterval=int(x)
-	except:
-		updateInterval=1000
 	print 'human player?\n[n]',
 	x=raw_input()
 	try:
@@ -39,6 +34,13 @@ else:
 			humanPlayer=False
 	except:
 		humanPlayer=False
+	if not humanPlayer:
+		print 'update interval?\n[1000]',
+		x=raw_input()
+		try:
+			updateInterval=int(x)
+		except:
+			updateInterval=1000
 bankroll=100000
 players=initPlayers(bankroll,humanPlayer)
 t=Table(players=players,nDecks=NDECKS,bankroll=bankroll,minBet=10,maxBet=20,bjmultiplier=1.5,dealtRatio=0.4)
