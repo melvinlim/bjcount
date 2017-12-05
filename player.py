@@ -379,15 +379,15 @@ class BasicDoubleR7Count(BasicDouble):
 	def betDecision(self,minB,maxB,table):
 		count=table.shoe.r7count
 		if self.settings.canSitOut:
-			if count<-10:
+			if count<(table.shoe.r7startingCount):
 				self.isSittingOut=True
 				bet=0
 				self.makeOpeningBet(0)
 				return False
 		if self.bankroll>=minB:
-			if count>10:
+			if count>5:
 				bet=maxB
-			elif count>5:
+			elif count>0:
 				bet=minB+(maxB-minB)*0.5
 			else:
 				bet=minB

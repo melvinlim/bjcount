@@ -6,6 +6,7 @@ class Shoe(object):
 		self.nDecks=nDecks
 		self.nCards=nDecks*52
 		self.fill()
+		self.r7startingCount=(-2)*self.nDecks
 		self.resetCounts()
 	def getDealtRatio(self):
 		return self.cardsDealt*1.0/self.nCards
@@ -24,7 +25,7 @@ class Shoe(object):
 			for j in range(52):
 				self.add(j)
 	def resetCounts(self):
-		self.r7count=(-2)*self.nDecks
+		self.r7count=self.r7startingCount
 	def shuffle(self):
 		self.fill()
 		self.resetCounts()
