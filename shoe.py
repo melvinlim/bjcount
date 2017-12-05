@@ -2,10 +2,10 @@ import random,time
 from card import *
 class Shoe(object):
 	def __init__(self,nDecks):
+		random.seed(time.time())
 		self.nDecks=nDecks
 		self.nCards=nDecks*52
 		self.fill()
-		random.seed(time.time())
 		self.resetCounts()
 	def getDealtRatio(self):
 		return self.cardsDealt*1.0/self.nCards
