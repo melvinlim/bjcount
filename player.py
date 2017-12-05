@@ -14,6 +14,8 @@ class Player(object):
 		self.handsPlayed=0
 		self.handsWon=0
 	def updateStats(self):
+		if self.bankroll>self.maxBankroll:
+			self.maxBankroll=self.bankroll
 		lft=self.maxBankroll-self.bankroll
 		if lft>self.maxlft:
 			self.maxlft=lft

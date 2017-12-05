@@ -89,7 +89,7 @@ class Dealer(Player):
 		if card==None:
 			print 'out of cards.  reshuffling.'
 			self.table.shoe.shuffle()
-			for p in players:
+			for p in self.table.players:
 				p.isSittingOut=False
 			card=self.table.shoe.pop()
 		hand.add(card)
