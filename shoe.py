@@ -17,7 +17,7 @@ class Shoe(object):
 			self.r7count+=1
 		elif card.bjv<7:
 			self.r7count+=1
-		elif card.bjv>8:
+		elif card.bjv>9:
 			self.r7count-=1
 	def fill(self):
 		self.decks=[]
