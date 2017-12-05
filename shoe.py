@@ -4,7 +4,7 @@ class Shoe(object):
 	def __init__(self,nDecks):
 		self.nDecks=nDecks
 		self.nCards=nDecks*52
-		self.refill()
+		self.fill()
 		random.seed(time.time())
 		self.resetCounts()
 	def getDealtRatio(self):
@@ -18,7 +18,7 @@ class Shoe(object):
 			self.r7count+=1
 		elif card.bjv>9:
 			self.r7count-=1
-	def refill(self):
+	def fill(self):
 		self.decks=[]
 		for i in range(self.nDecks):
 			for j in range(52):
@@ -26,6 +26,7 @@ class Shoe(object):
 	def resetCounts(self):
 		self.r7count=(-2)*self.nDecks
 	def shuffle(self):
+		self.fill()
 		self.resetCounts()
 		self.cardsDealt=0
 		tmp=[]

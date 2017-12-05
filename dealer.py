@@ -3,7 +3,6 @@ class Dealer(Player):
 	def __init__(self,pid,bankroll,table):
 		super(Dealer,self).__init__(pid,bankroll)
 		self.table=table
-		self.table.shoe.refill()
 		self.table.shoe.shuffle()
 		self.hand=self.hands[0]
 	def discardHand(self):
@@ -24,7 +23,6 @@ class Dealer(Player):
 			return 'stand'
 	def step(self,players):
 		if self.table.shoe.getDealtRatio()>self.table.dealtRatio:
-			self.table.shoe.refill()
 			self.table.shoe.shuffle()
 			for p in players:
 				p.isSittingOut=False
@@ -92,7 +90,6 @@ class Dealer(Player):
 		card=self.table.shoe.pop()
 		if card==None:
 			print 'out of cards.  reshuffling.'
-			self.table.shoe.refill()
 			self.table.shoe.shuffle()
 			for p in players:
 				p.isSittingOut=False
