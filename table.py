@@ -96,3 +96,4 @@ class Table(object):
 	def status(self):
 		for p in self.players:
 			p.status()
+		print 'count: %d'%self.shoe.r7count
