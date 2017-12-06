@@ -126,9 +126,9 @@ class Human(Player):
 		elif hand.canSplit() and c=='p':
 			d='split'
 		return d
-class BasicDouble(Player):
+class Basic(Player):
 	def __init__(self,pid,bankroll,settings):
-		super(BasicDouble,self).__init__(pid,bankroll)
+		super(Basic,self).__init__(pid,bankroll)
 		self.settings=settings
 	def decide(self,table,first,hand):
 		dealerCard=table.dealer.hand.cards[0].bjv
@@ -299,9 +299,9 @@ class BasicDouble(Player):
 			else:
 				return 'stand'
 		return 'stand'
-class BasicDoubleR7Count(BasicDouble):
+class BasicR7Count(Basic):
 	def __init__(self,pid,bankroll,settings):
-		super(BasicDoubleR7Count,self).__init__(pid,bankroll,settings)
+		super(BasicR7Count,self).__init__(pid,bankroll,settings)
 	def decideOnInsurance(self,table):
 		if self.settings.alwaysTakeInsurance and table.shoe.r7count>=2:
 			self.bankroll-=self.hands[0].wager/2
