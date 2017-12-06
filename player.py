@@ -54,7 +54,7 @@ class Player(object):
 	def decide(self,table,first,hand):
 		hand.updateValue()
 		if hand.isSoft()==False:
-			if hand.trueValue>=17:
+			if hand.highValue>=17:
 				return 'stand'
 		d=random.randint(0,1)
 		if d==0:
@@ -137,9 +137,9 @@ class BasicNoDouble(Player):
 		if hand.canSplit():
 			if hand.hasAce:
 				return 'split'
-			elif hand.handValue==20:
+			elif hand.lowValue==20:
 				return 'stand'
-			elif hand.handValue==18:
+			elif hand.lowValue==18:
 				if dealerCard<7:
 					return 'split'
 				elif dealerCard>9:
@@ -148,21 +148,21 @@ class BasicNoDouble(Player):
 					return 'split'
 				else:
 					return 'stand'
-			elif hand.handValue==16:
+			elif hand.lowValue==16:
 				return 'split'
-			elif hand.handValue==14:
+			elif hand.lowValue==14:
 				if dealerCard<8:
 					return 'split'
 				else:
 					return 'hit'
-			elif hand.handValue==12:
+			elif hand.lowValue==12:
 				if dealerCard<7:
 					return 'split'
 				else:
 					return 'hit'
-			elif hand.handValue==10:
+			elif hand.lowValue==10:
 				return 'hit'
-			elif hand.handValue==8:
+			elif hand.lowValue==8:
 				if dealerCard>6 or dealerCard<5:
 					return 'hit'
 				else:
@@ -173,9 +173,9 @@ class BasicNoDouble(Player):
 				else:
 					return 'hit'
 		elif hand.isSoft():
-			if hand.handValue>8:
+			if hand.lowValue>8:
 				return 'stand'
-			elif hand.handValue==8:
+			elif hand.lowValue==8:
 				if dealerCard<9:
 					return 'stand'
 				else:
@@ -183,21 +183,21 @@ class BasicNoDouble(Player):
 			else:
 				return 'hit'
 		else:
-			if hand.handValue<12:
+			if hand.lowValue<12:
 				return 'hit'
-			elif hand.handValue==12:
+			elif hand.lowValue==12:
 				if dealerCard>6:
 					return 'hit'
 				elif dealerCard<4:
 					return 'hit'
 				else:
 					return 'stand'
-			elif hand.handValue==13 or hand.handValue==14:
+			elif hand.lowValue==13 or hand.lowValue==14:
 				if dealerCard>6:
 					return 'hit'
 				else:
 					return 'stand'
-			elif hand.handValue==15:
+			elif hand.lowValue==15:
 				if dealerCard==10:
 					if self.settings.allowSurrender:
 						return 'surrender'
@@ -207,7 +207,7 @@ class BasicNoDouble(Player):
 					return 'hit'
 				else:
 					return 'stand'
-			elif hand.handValue==16:
+			elif hand.lowValue==16:
 				if dealerCard>8:
 					if self.settings.allowSurrender:
 						return 'surrender'
@@ -231,9 +231,9 @@ class BasicDouble(Player):
 		if hand.canSplit():
 			if hand.hasAce:
 				return 'split'
-			elif hand.handValue==20:
+			elif hand.lowValue==20:
 				return 'stand'
-			elif hand.handValue==18:
+			elif hand.lowValue==18:
 				if dealerCard<7:
 					return 'split'
 				elif dealerCard>9:
@@ -242,19 +242,19 @@ class BasicDouble(Player):
 					return 'split'
 				else:
 					return 'stand'
-			elif hand.handValue==16:
+			elif hand.lowValue==16:
 				return 'split'
-			elif hand.handValue==14:
+			elif hand.lowValue==14:
 				if dealerCard<8:
 					return 'split'
 				else:
 					return 'hit'
-			elif hand.handValue==12:
+			elif hand.lowValue==12:
 				if dealerCard<7:
 					return 'split'
 				else:
 					return 'hit'
-			elif hand.handValue==10:
+			elif hand.lowValue==10:
 				if dealerCard<10:
 					return 'double'
 				else:
@@ -263,7 +263,7 @@ class BasicDouble(Player):
 							if table.shoe.r7count>=2:
 								return 'double'
 					return 'hit'
-			elif hand.handValue==8:
+			elif hand.lowValue==8:
 				if dealerCard>6 or dealerCard<5:
 					return 'hit'
 				else:
@@ -274,28 +274,28 @@ class BasicDouble(Player):
 				else:
 					return 'hit'
 		elif hand.isSoft():
-			if hand.handValue>9:
+			if hand.lowValue>9:
 				return 'stand'
-			elif hand.handValue==9:
+			elif hand.lowValue==9:
 				if dealerCard==6:
 					return 'double'
 				else:
 					return 'stand'
-			elif hand.handValue==8:
+			elif hand.lowValue==8:
 				if dealerCard>8:
 					return 'hit'
 				elif dealerCard>6:
 					return 'stand'
 				else:
 					return 'double'
-			elif hand.handValue==7:
+			elif hand.lowValue==7:
 				if dealerCard>6:
 					return 'hit'
 				elif dealerCard<3:
 					return 'hit'
 				else:
 					return 'double'
-			elif hand.handValue>4:
+			elif hand.lowValue>4:
 				if dealerCard>6:
 					return 'hit'
 				elif dealerCard<4:
@@ -310,9 +310,9 @@ class BasicDouble(Player):
 				else:
 					return 'double'
 		else:
-			if hand.handValue<9:
+			if hand.lowValue<9:
 				return 'hit'
-			elif hand.handValue==9:
+			elif hand.lowValue==9:
 				if dealerCard>6 or dealerCard<3:
 					if self.settings.simplifiedStrategy:
 						if dealerCard==2:
@@ -320,7 +320,7 @@ class BasicDouble(Player):
 					return 'hit'
 				else:
 					return 'double'
-			elif hand.handValue==10:
+			elif hand.lowValue==10:
 				if dealerCard<10:
 					return 'double'
 				else:
@@ -329,9 +329,9 @@ class BasicDouble(Player):
 							if table.shoe.r7count>=2:
 								return 'double'
 					return 'hit'
-			elif hand.handValue==11:
+			elif hand.lowValue==11:
 				return 'double'
-			elif hand.handValue==12:
+			elif hand.lowValue==12:
 				if dealerCard>6:
 					return 'hit'
 				elif dealerCard<4:
@@ -341,12 +341,12 @@ class BasicDouble(Player):
 						return 'hit'
 				else:
 					return 'stand'
-			elif hand.handValue==13 or hand.handValue==14:
+			elif hand.lowValue==13 or hand.lowValue==14:
 				if dealerCard>6:
 					return 'hit'
 				else:
 					return 'stand'
-			elif hand.handValue==15:
+			elif hand.lowValue==15:
 				if dealerCard==10:
 					if self.settings.allowSurrender:
 						return 'surrender'
@@ -356,7 +356,7 @@ class BasicDouble(Player):
 					return 'hit'
 				else:
 					return 'stand'
-			elif hand.handValue==16:
+			elif hand.lowValue==16:
 				if dealerCard>8:
 					if self.settings.allowSurrender:
 						return 'surrender'

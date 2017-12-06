@@ -3,7 +3,7 @@ class Hand(object):
 		self.cards=[]
 		self.hasAce=False
 		self.wager=0
-		self.handValue=0
+		self.lowValue=0
 		self.textString=''
 		self.handWon=False
 		self.handTied=False
@@ -14,15 +14,15 @@ class Hand(object):
 	def add(self,card):
 		if card.face=='A':
 			self.hasAce=True
-			self.handValue+=1
+			self.lowValue+=1
 		else:
-			self.handValue+=card.bjv
+			self.lowValue+=card.bjv
 		self.cards.append(card)
 		self.textString+=card.textString+' '
 		self.updateValue()
 	def isSoft(self):
 		if self.hasAce:
-			if (self.handValue+10)<=21:
+			if (self.lowValue+10)<=21:
 				return True
 		return False
 	def canSplit(self):
@@ -32,11 +32,11 @@ class Hand(object):
 		return False
 	def updateValue(self):
 		if self.isSoft():
-			v=self.handValue+10
+			v=self.lowValue+10
 		else:
-			v=self.handValue
+			v=self.lowValue
 		if v>21:
 			self.isBusted=True
 		elif v==21 and len(self.cards)==2:
 			self.isBlackjack=True
-		self.trueValue=v
+		self.highValue=v

@@ -13,6 +13,8 @@ def initPlayers(bankroll,humanPlayer=False):
 	players.append(BasicDoubleR7Count(len(players),bankroll,Settings(canSitOut=True,alwaysTakeInsurance=True,modifiedStrategy=True)))
 	players.append(BasicDoubleR7Count(len(players),bankroll,Settings(canSitOut=True,alwaysTakeInsurance=True,modifiedStrategy=True,simplifiedStrategy=True)))
 	if humanPlayer==True:
+		players=[]
+		players.append(Player(len(players),bankroll))
 		players.append(Human(len(players),bankroll))
 	return players
 humanPlayer=False
