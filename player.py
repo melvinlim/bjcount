@@ -162,11 +162,15 @@ class BasicDouble(Player):
 					return 'hit'
 			elif hand.lowValue==10:
 				if dealerCard<10:
+					if not self.settings.allowDouble:
+						return 'hit'
 					return 'double'
 				else:
 					if self.settings.modifiedStrategy:
 						if dealerCard==10:
 							if table.shoe.r7count>=2:
+								if not self.settings.allowDouble:
+									return 'hit'
 								return 'double'
 					return 'hit'
 			elif hand.lowValue==8:
@@ -184,6 +188,8 @@ class BasicDouble(Player):
 				return 'stand'
 			elif hand.lowValue==9:
 				if dealerCard==6:
+					if not self.settings.allowDouble:
+						return 'stand'
 					return 'double'
 				else:
 					return 'stand'
@@ -193,6 +199,8 @@ class BasicDouble(Player):
 				elif dealerCard>6:
 					return 'stand'
 				else:
+					if not self.settings.allowDouble:
+						return 'stand'
 					return 'double'
 			elif hand.lowValue==7:
 				if dealerCard>6:
@@ -200,6 +208,8 @@ class BasicDouble(Player):
 				elif dealerCard<3:
 					return 'hit'
 				else:
+					if not self.settings.allowDouble:
+						return 'hit'
 					return 'double'
 			elif hand.lowValue>4:
 				if dealerCard>6:
@@ -207,6 +217,8 @@ class BasicDouble(Player):
 				elif dealerCard<4:
 					return 'hit'
 				else:
+					if not self.settings.allowDouble:
+						return 'hit'
 					return 'double'
 			else:
 				if dealerCard>6:
@@ -214,6 +226,8 @@ class BasicDouble(Player):
 				elif dealerCard<5:
 					return 'hit'
 				else:
+					if not self.settings.allowDouble:
+						return 'hit'
 					return 'double'
 		else:
 			if hand.lowValue<9:
@@ -222,20 +236,30 @@ class BasicDouble(Player):
 				if dealerCard>6 or dealerCard<3:
 					if self.settings.simplifiedStrategy:
 						if dealerCard==2:
+							if not self.settings.allowDouble:
+								return 'hit'
 							return 'double'
 					return 'hit'
 				else:
+					if not self.settings.allowDouble:
+						return 'hit'
 					return 'double'
 			elif hand.lowValue==10:
 				if dealerCard<10:
+					if not self.settings.allowDouble:
+						return 'hit'
 					return 'double'
 				else:
 					if self.settings.modifiedStrategy:
 						if dealerCard==10:
 							if table.shoe.r7count>=2:
+								if not self.settings.allowDouble:
+									return 'hit'
 								return 'double'
 					return 'hit'
 			elif hand.lowValue==11:
+				if not self.settings.allowDouble:
+					return 'hit'
 				return 'double'
 			elif hand.lowValue==12:
 				if dealerCard>6:

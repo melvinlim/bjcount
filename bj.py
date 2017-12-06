@@ -5,10 +5,10 @@ def initPlayers(bankroll,humanPlayer=False):
 	players=[]
 	players.append(Player(len(players),bankroll))
 	players.append(Stands(len(players),bankroll))
-#	players.append(BasicNoDouble(len(players),bankroll))
+	players.append(BasicDouble(len(players),bankroll,Settings(allowDouble=False)))
 	players.append(BasicDouble(len(players),bankroll,Settings()))
 	players.append(BasicDoubleR7Count(len(players),bankroll,Settings()))
-	players.append(BasicDoubleR7Count(len(players),bankroll,Settings(canSitOut=True)))
+#	players.append(BasicDoubleR7Count(len(players),bankroll,Settings(canSitOut=True)))
 	players.append(BasicDoubleR7Count(len(players),bankroll,Settings(canSitOut=True,alwaysTakeInsurance=True)))
 	players.append(BasicDoubleR7Count(len(players),bankroll,Settings(canSitOut=True,alwaysTakeInsurance=True,modifiedStrategy=True)))
 	players.append(BasicDoubleR7Count(len(players),bankroll,Settings(canSitOut=True,alwaysTakeInsurance=True,modifiedStrategy=True,simplifiedStrategy=True)))
