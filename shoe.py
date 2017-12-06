@@ -42,10 +42,19 @@ class Shoe(object):
 	def printAll(self):
 		for card in self.decks:
 			card.disp()
-	def pop(self):
+	def pop(self,target=None):
 		self.cardsDealt+=1
+		if target!=None:
+			i=0
+			for c in self.decks:
+				if (c.n%13)==target:
+					targetIndex=i
+				i+=1
 		try:
-			card=self.decks.pop()
+			if target==None:
+				card=self.decks.pop()
+			else:
+				card=self.decks.pop(targetIndex)
 		except:
 			card=None
 		self.updateCounts(card)

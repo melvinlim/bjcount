@@ -1,5 +1,6 @@
 from shoe import *
 from dealer import *
+import random
 class Table(object):
 	def __init__(self,players,nDecks,bankroll,minBet,maxBet,bjmultiplier,dealtRatio):
 		self.dealtRatio=dealtRatio
@@ -34,7 +35,7 @@ class Table(object):
 		p.hands[0].add(c2)
 		d.hands[0].add(c3)
 		return p,d
-	def mcSim(self,p1,p2,d1):
+	def mcSim(self,p1,p2,d1,targetCount=None):
 		quiet=True
 		handsPerStep=1000
 		hands=0
@@ -42,6 +43,18 @@ class Table(object):
 		while True:
 			for i in range(handsPerStep):
 				p,d=self.setUp(p1,p2,d1)
+				if targetCount!=None:
+					while self.shoe.r7count<targetCount:
+						card=None
+						while card==None:
+							x=random.randint(2,6)
+							card=self.shoe.pop(x)
+					while self.shoe.r7count>targetCount:
+						card=None
+						while card==None:
+							x=random.randint(10,14)
+							x=x%13
+							card=self.shoe.pop(x)
 				d.dealCard(d.hands[0])
 				decision=d.handleDecisions(p,quiet)
 				if not quiet:
@@ -66,7 +79,7 @@ class Table(object):
 			for d in value:
 				print d+':\t'+str(value[d]*1.0/hands)
 			print p1,p2,d1
-			print 'simulated %d hands'%hands
+			print 'simulated %d hands at count of %d'%(hands,targetCount)
 			print 'continue? (c to change problem)\t[y]',
 			x=raw_input()
 			if x=='c':
@@ -76,7 +89,9 @@ class Table(object):
 				p2=self.assignInput(p2)
 				print 'd1:\t',
 				d1=self.assignInput(d1)
-				print 'new problem: [%d,%d,%d]'%(p1,p2,d1)
+				print 'targetCount: [%d]\t'%(targetCount),
+				targetCount=self.assignInput(targetCount)
+				print 'new problem: [%d,%d,%d](%d)'%(p1,p2,d1,targetCount)
 				hands=0
 				value=self.initValue()
 			elif x=='n':

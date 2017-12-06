@@ -49,7 +49,7 @@ t=Table(players=players,nDecks=NDECKS,bankroll=bankroll,minBet=10,maxBet=20,bjmu
 handsPlayed=0
 if doMC:
 #	t.mcSim(8,7,1)	#test player 8,7 versus dealer A
-	t.mcSim(8,7,7)
+	t.mcSim(8,7,7,t.shoe.r7startingCount)
 else:
 	while True:
 		print 'rounds dealt: '+str(handsPlayed)
