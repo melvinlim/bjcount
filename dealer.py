@@ -13,7 +13,6 @@ class Dealer(Player):
 		print self.hand.textString
 	def type1(self):
 		soft=self.hand.isSoft()
-		self.hand.updateValue()
 		v=self.hand.highValue
 		if v<17:
 			return 'hit'
@@ -102,7 +101,6 @@ class Dealer(Player):
 	def evalAll(self,players):
 		wins=[]
 		ties=[]
-		self.hand.updateValue()
 		dt=self.hand.highValue
 		for p in players:
 			if p.hasSurrendered:
@@ -110,7 +108,6 @@ class Dealer(Player):
 				p.hasSurrendered=False
 			else:
 				for h in p.hands:
-					h.updateValue()
 					t=h.highValue
 					if self.hand.isBlackjack:
 							if h.isBlackjack:
@@ -142,7 +139,6 @@ class Dealer(Player):
 	def handleDecisions(self,p,quiet=False):
 		hasHit=False
 		firstDecision=True
-		p.hands[0].updateValue()
 		phv=p.hands[0].highValue
 		while phv<21:
 			d=p.decide(self.table,firstDecision,p.hands[0])
@@ -161,7 +157,6 @@ class Dealer(Player):
 			elif d=='hit':
 				hasHit=True
 				card=self.dealCard(p.hands[0])
-				p.hands[0].updateValue()
 				phv=p.hands[0].highValue
 				if not quiet:
 					p.disp()
@@ -171,7 +166,6 @@ class Dealer(Player):
 					return p
 				else:
 					card=self.dealCard(p.hands[0])
-					p.hands[0].updateValue()
 					phv=p.hands[0].highValue
 					if not quiet:
 						p.disp()
@@ -198,7 +192,6 @@ class Dealer(Player):
 		print 'split hand:\t',
 		print h.textString
 		firstDecision=False
-		h.updateValue()
 		phv=h.highValue
 		while phv<21:
 			d=p.decide(self.table,firstDecision,h)
@@ -206,7 +199,6 @@ class Dealer(Player):
 				return result
 			elif d=='hit':
 				self.dealCard(h)
-				h.updateValue()
 				phv=h.highValue
 				print 'split hand:\t',
 				print h.textString

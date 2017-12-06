@@ -52,7 +52,6 @@ class Player(object):
 		print '\thands: %d'%(self.handsPlayed),
 		print '\tmaxlft: %d'%(self.maxlft)
 	def decide(self,table,first,hand):
-		hand.updateValue()
 		if hand.isSoft()==False:
 			if hand.highValue>=17:
 				return 'stand'
