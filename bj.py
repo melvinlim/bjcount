@@ -5,7 +5,7 @@ def initPlayers(bankroll,humanPlayer=False):
 	players=[]
 	players.append(Player(len(players),bankroll))
 	players.append(Stands(len(players),bankroll))
-	players.append(Basic(len(players),bankroll,Settings(allowDouble=False)))
+#	players.append(Basic(len(players),bankroll,Settings(allowDouble=False)))
 	players.append(Basic(len(players),bankroll,Settings()))
 	players.append(BasicR7Count(len(players),bankroll,Settings()))
 #	players.append(BasicR7Count(len(players),bankroll,Settings(canSitOut=True)))
@@ -19,11 +19,17 @@ def initPlayers(bankroll,humanPlayer=False):
 	return players
 humanPlayer=False
 updateInterval=1
-NDECKS=8
+nDecks=8
+print 'number of decks?\t[%d]'%nDecks,
+x=raw_input()
+try:
+	n=int(x)
+except:
+	n=nDecks
+nDecks=n
 print 'mcSim?\t[n]',
 x=raw_input()
 if x=='y':
-	NDECKS=8
 	doMC=True
 else:
 	doMC=False
@@ -45,7 +51,7 @@ else:
 			updateInterval=1000
 bankroll=100000
 players=initPlayers(bankroll,humanPlayer)
-t=Table(players=players,nDecks=NDECKS,bankroll=bankroll,minBet=10,maxBet=20,bjmultiplier=1.5,dealtRatio=0.4)
+t=Table(players=players,nDecks=nDecks,bankroll=bankroll,minBet=10,maxBet=20,bjmultiplier=1.5,dealtRatio=0.4)
 handsPlayed=0
 if doMC:
 #	t.mcSim(8,7,1)	#test player 8,7 versus dealer A

@@ -43,6 +43,7 @@ class Table(object):
 		while True:
 			for i in range(handsPerStep):
 				p,d=self.setUp(p1,p2,d1)
+				self.shoe.shuffle()
 				if targetCount!=None:
 					while self.shoe.r7count<targetCount:
 						card=None
